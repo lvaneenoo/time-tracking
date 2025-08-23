@@ -1,0 +1,35 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Restore dependencies API
+      run: dotnet restore ./src/API/
+      
+    - name: Build API
+      run: dotnet build --no-restore ./src/API/
+      
+    - name: Restore dependencies integration tests
+      run: dotnet restore ./src/IntegrationTests/
+      
+    - name: Build integration tests
+      run: dotnet build --no-restore ./src/IntegrationTests/
+      
+    - name: Run integration tests
+      run: dotnet test --no-build --verbosity normal ./src/IntegrationTests/
+      
