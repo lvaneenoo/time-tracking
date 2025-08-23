@@ -19,10 +19,10 @@ jobs:
         dotnet-version: 9.0.x
         
     - name: Restore dependencies API
-      run: dotnet restore ./src/API/
+      run: dotnet restore ./src/Api/
       
     - name: Build API
-      run: dotnet build --no-restore ./src/API/
+      run: dotnet build --no-restore ./src/Api/
       
     - name: Restore dependencies integration tests
       run: dotnet restore ./src/IntegrationTests/
