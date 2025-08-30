@@ -11,6 +11,8 @@ internal sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<Tracked
         _value = value;
     }
 
+    public DayOfWeek DayOfWeek => _value.DayOfWeek;
+
     public static bool TryCreate(DateOnly value, [NotNullWhen(true)] out TrackedDate? result)
     {
         if (MinValue <= value)

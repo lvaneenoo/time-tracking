@@ -16,7 +16,10 @@ app.MapGet("/time-sheets/{s}", async (ITimeSheets timeSheets, string s) =>
         return Results.BadRequest();
     }
 
-    var timeSheet = await timeSheets.FindAsync(date);
+    if (await timeSheets.FindAsync(date) is not TimeSheet timeSheet)
+    {
+        return Results.NotFound();
+    }
 
     return Results.Ok(timeSheet.Date.ToString());
 });

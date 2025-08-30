@@ -1,25 +1,33 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace IntegrationTests;
 
 public class TimeSheetsTests
 {
-    public static TheoryData<DateOnly> TestData => new()
+    [Theory]
+    [ClassData(typeof(Weekdays))]
+    public async Task Get_existing_returns_ok(DateOnly date)
     {
-        { DateOnly.FromDateTime(DateTime.Now) }
-    };
+        Assert.Equal(HttpStatusCode.OK, await GetStatusCodeAsync(date));
+    }
 
     [Theory]
-    [MemberData(nameof(TestData))]
-    public async Task GetAsync(DateOnly date)
+    [ClassData(typeof(WeekendDays))]
+    public async Task Get_non_existent_returns_not_found(DateOnly date)
+    {
+        Assert.Equal(HttpStatusCode.NotFound, await GetStatusCodeAsync(date));
+    }
+
+    private static Uri BuildUri(DateOnly date) => new($"/time-sheets/{date:yyyy-MM-dd}");
+
+    private static async Task<HttpStatusCode> GetStatusCodeAsync(DateOnly date)
     {
         using var factory = new WebApplicationFactory<Program>();
         using var client = factory.CreateClient();
 
         var response = await client.GetAsync(BuildUri(date));
 
-        Assert.True(response.IsSuccessStatusCode);
+        return response.StatusCode;
     }
-
-    private static Uri BuildUri(DateOnly date) => new($"/time-sheets/{date:yyyy-MM-dd}");
 }
