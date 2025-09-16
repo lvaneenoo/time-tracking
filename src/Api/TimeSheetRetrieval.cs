@@ -7,21 +7,15 @@ internal static class TimeSheetRetrieval
 
     private static async Task<IResult> GetAsync(ITimeSheets timeSheets, string s)
     {
-        if (!DateOnly.TryParseExact(s, "yyyy-MM-dd", out DateOnly value))
+        try
         {
-            return TypedResults.BadRequest();
-        }
+            var retrieval = new RetrieveTimeSheet(timeSheets, s);
 
-        if (!TrackedDate.TryCreate(value, out TrackedDate? date))
+            return await retrieval.ExecuteAsync();
+        }
+        catch
         {
-            return TypedResults.BadRequest();
+            return TypedResults.InternalServerError();
         }
-
-        if (await timeSheets.FindAsync(date) is not TimeSheet timeSheet)
-        {
-            return TypedResults.NotFound();
-        }
-
-        return TypedResults.Ok(timeSheet.Date.ToString());
     }
 }
