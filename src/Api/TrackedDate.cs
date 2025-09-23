@@ -13,17 +13,25 @@ internal sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<Tracked
 
     public DayOfWeek DayOfWeek => _value.DayOfWeek;
 
-    public static bool TryCreate(DateOnly value, [NotNullWhen(true)] out TrackedDate? result)
+    public static bool TryParse(string s, [NotNullWhen(true)] out TrackedDate? result)
     {
-        if (MinValue <= value)
+        if (!DateOnly.TryParseExact(s, "yyyy-MM-dd", out DateOnly value))
         {
-            result = new TrackedDate(value);
-            return true;
+            result = null;
+            return false;
         }
 
-        result = null;
-        return false;
+        if (!IsInRange(value))
+        {
+            result = null;
+            return false;
+        }
+
+        result = new TrackedDate(value);
+        return true;
     }
+
+    private static bool IsInRange(DateOnly value) => MinValue <= value;
 
     public int CompareTo(TrackedDate? other) => other is null ? 1 : _value.CompareTo(other._value);
     public bool Equals(TrackedDate? other) => other is not null && _value == other._value;

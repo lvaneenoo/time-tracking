@@ -1,9 +1,12 @@
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text.Json;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace IntegrationTests;
 
-public class TimeSheetEntriesTests
+public class PostTimeSheetEntryTests
 {
     [Theory]
     [ClassData(typeof(Weekdays))]
@@ -21,12 +24,23 @@ public class TimeSheetEntriesTests
 
     private static Uri BuildUri(DateOnly date) => new($"/time-sheets/{date:yyyy-MM-dd}/entries");
 
+    private static StringContent CreateContent()
+    {
+        dynamic entry = new
+        {
+            Start = "09:00:00",
+            End = "09:59:00"
+        };
+
+        return new StringContent(JsonSerializer.Serialize(entry), new MediaTypeHeaderValue("application/json"));
+    }
+
     private static async Task<HttpStatusCode> PostAsync(DateOnly date)
     {
         using var factory = new WebApplicationFactory<Program>();
         using var client = factory.CreateClient();
 
-        var response = await client.PostAsync(BuildUri(date), null);
+        var response = await client.PostAsync(BuildUri(date), CreateContent());
 
         return response.StatusCode;
     }

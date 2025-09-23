@@ -5,12 +5,7 @@ internal class RetrieveTimeSheet(ITimeSheets timeSheets, string s)
 
     public async Task<IResult> ExecuteAsync()
     {
-        if (!DateOnly.TryParseExact(_s, "yyyy-MM-dd", out DateOnly value))
-        {
-            return TypedResults.BadRequest();
-        }
-
-        if (!TrackedDate.TryCreate(value, out TrackedDate? date))
+        if (!TrackedDate.TryParse(_s, out TrackedDate? date))
         {
             return TypedResults.BadRequest();
         }
