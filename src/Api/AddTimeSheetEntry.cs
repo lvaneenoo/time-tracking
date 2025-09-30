@@ -1,17 +1,17 @@
-internal class PostTimeSheetEntry(ITimeSheets timeSheets, string dateArg, TimeSheetEntryPosted body)
+internal class AddTimeSheetEntry(ITimeSheets timeSheets, TrackedDate date, TimeSheetEntryPosted entryPosted)
 {
-    private readonly TimeSheetEntryPosted _body = body;
+    private readonly TimeSheetEntryPosted _entryPosted = entryPosted;
     private readonly ITimeSheets _timeSheets = timeSheets;
-    private readonly string _dateArg = dateArg;
+    private readonly TrackedDate _date = date;
 
     public async Task<IResult> ExecuteAsync()
     {
-        if (!TimeOnly.TryParse(_body.Start, out var start))
+        if (!TimeOnly.TryParse(_entryPosted.Start, out var start))
         {
             return TypedResults.BadRequest();
         }
 
-        if (!TimeOnly.TryParse(_body.End, out var end))
+        if (!TimeOnly.TryParse(_entryPosted.End, out var end))
         {
             return TypedResults.BadRequest();
         }
@@ -21,12 +21,7 @@ internal class PostTimeSheetEntry(ITimeSheets timeSheets, string dateArg, TimeSh
             return TypedResults.BadRequest();
         }
 
-        if (!TrackedDate.TryParse(_dateArg, out var date))
-        {
-            return TypedResults.NotFound();
-        }
-
-        if (await _timeSheets.FindAsync(date) is not TimeSheet timeSheet)
+        if (await _timeSheets.FindAsync(_date) is not TimeSheet timeSheet)
         {
             return TypedResults.NotFound();
         }
