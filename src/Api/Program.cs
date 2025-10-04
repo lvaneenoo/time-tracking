@@ -4,7 +4,7 @@ builder.Services.AddSingleton<ITimeSheets, TimeSheetsStub>();
 
 var app = builder.Build();
 
-app.MapTimeSheetRetrieval();
+app.AddGetTimeSheetHandler();
 app.AddPostTimeSheetEntryHandler();
 
 app.Run();

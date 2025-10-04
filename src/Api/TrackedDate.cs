@@ -37,7 +37,7 @@ internal sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<Tracked
     public bool Equals(TrackedDate? other) => other is not null && _value == other._value;
     public override bool Equals(object? obj) => Equals(obj as TrackedDate);
     public override int GetHashCode() => _value.GetHashCode();
-    public override string ToString() => _value.ToString();
+    public override string ToString() => _value.ToString("yyyy-MM-dd");
 
     public static bool operator ==(TrackedDate? a, TrackedDate? b) => a is not null && a.Equals(b);
     public static bool operator !=(TrackedDate? a, TrackedDate? b) => !(a == b);
