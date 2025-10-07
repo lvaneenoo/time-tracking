@@ -9,38 +9,45 @@ namespace IntegrationTests;
 public class PostTimeSheetEntryTests
 {
     [Theory]
-    [ClassData(typeof(Weekdays))]
-    public async Task Post_existing_time_sheet_returns_created(DateOnly date)
+    [ClassData(typeof(WorkedHours))]
+    public async Task Post_existing_entry_returns_internal_server_error(DateOnly date, TimeOnly start, TimeOnly end)
     {
-        Assert.Equal(HttpStatusCode.Created, await PostAsync(date));
+        Assert.Equal(HttpStatusCode.InternalServerError, await PostAsync(date, start, end));
     }
 
     [Theory]
-    [ClassData(typeof(WeekendDays))]
-    public async Task Post_non_existent_time_sheet_returns_not_found(DateOnly date)
+    [ClassData(typeof(WeekdayHours))]
+    public async Task Post_existing_time_sheet_returns_created(DateOnly date, TimeOnly start, TimeOnly end)
     {
-        Assert.Equal(HttpStatusCode.NotFound, await PostAsync(date));
+        Assert.Equal(HttpStatusCode.Created, await PostAsync(date, start, end));
+    }
+
+    [Theory]
+    [ClassData(typeof(WeekendDayHours))]
+    public async Task Post_non_existent_time_sheet_returns_not_found(DateOnly date, TimeOnly start, TimeOnly end)
+    {
+        Assert.Equal(HttpStatusCode.NotFound, await PostAsync(date, start, end));
     }
 
     private static Uri BuildUri(DateOnly date) => new($"/time-sheets/{date:yyyy-MM-dd}/entries");
 
-    private static StringContent CreateContent()
+    private static StringContent CreateContent(TimeOnly start, TimeOnly end)
     {
         dynamic entry = new
         {
-            Start = "09:00:00",
-            End = "09:59:00"
+            Start = start.ToString("HH:mm"),
+            End = end.ToString("HH:mm")
         };
 
         return new StringContent(JsonSerializer.Serialize(entry), new MediaTypeHeaderValue("application/json"));
     }
 
-    private static async Task<HttpStatusCode> PostAsync(DateOnly date)
+    private static async Task<HttpStatusCode> PostAsync(DateOnly date, TimeOnly start, TimeOnly end)
     {
         using var factory = new WebApplicationFactory<Program>();
         using var client = factory.CreateClient();
 
-        var response = await client.PostAsync(BuildUri(date), CreateContent());
+        var response = await client.PostAsync(BuildUri(date), CreateContent(start, end));
 
         return response.StatusCode;
     }
