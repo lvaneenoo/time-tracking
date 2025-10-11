@@ -3,7 +3,7 @@ internal class TimeSheet
     private TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries)
     {
         Date = date;
-        Entries = [..entries];
+        Entries = [.. entries];
     }
 
     public TrackedDate Date { get; }
@@ -11,16 +11,18 @@ internal class TimeSheet
 
     public static TimeSheet Create(TrackedDate date, IList<TimeSheetEntry> entries) => new(date, entries);
 
-    public TimeSheet AddEntry(Period period)
+    public override int GetHashCode() => Date.GetHashCode();
+    public override string ToString() => Date.ToString();
+
+    public bool TryAddEntry(Period period, out TimeSheet? result)
     {
         if (Entries.Any(entry => entry.Period.Overlaps(period)))
         {
-            throw new InvalidOperationException();
+            result = null;
+            return false;
         }
 
-        return new TimeSheet(Date, [.. Entries, new TimeSheetEntry(period)]);
+        result = new TimeSheet(Date, [.. Entries, new TimeSheetEntry(period)]);
+        return true;
     }
-
-    public override int GetHashCode() => Date.GetHashCode();
-    public override string ToString() => Date.ToString();
 }

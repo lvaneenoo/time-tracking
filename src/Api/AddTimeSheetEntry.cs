@@ -35,8 +35,6 @@ internal class AddTimeSheetEntry(HttpContext httpContext, TrackedDate date, Time
             return Results.NotFound();
         }
 
-        timeSheet.AddEntry(period!);
-
-        return Results.Created();
+        return timeSheet.TryAddEntry(period!, out _) ? Results.Created() : Results.BadRequest();
     }
 }
