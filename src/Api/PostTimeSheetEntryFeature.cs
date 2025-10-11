@@ -2,33 +2,31 @@ using System.Text.Json;
 
 internal static class PostTimeSheetEntryFeature
 {
-    public static void AddPostTimeSheetEntryHandler(this IEndpointRouteBuilder endpoints)
+    public static void AddPostTimeSheetEntryHandler(this IEndpointRouteBuilder app)
     {
-        endpoints.MapPost("/time-sheets/{date}/entries", PostAsync);
-    }
-
-    private static async Task<IResult> PostAsync(HttpContext context, string date)
-    {
-        try
+        app.MapPost("/time-sheets/{date}/entries", async (HttpContext context, string date) =>
         {
-            if (!TrackedDate.TryParse(date, out var timeSheetDate))
+            try
             {
-                return TypedResults.BadRequest();
-            }
+                if (!TrackedDate.TryParse(date, out var timeSheetDate))
+                {
+                    return Results.BadRequest();
+                }
 
-            if (await GetBodyAsync(context) is not TimeSheetEntryPosted entryPosted)
+                if (await GetBodyAsync(context) is not TimeSheetEntryPosted entryPosted)
+                {
+                    return Results.BadRequest();
+                }
+
+                var command = new AddTimeSheetEntry(context, timeSheetDate, entryPosted);
+
+                return await command.ExecuteAsync();
+            }
+            catch
             {
-                return TypedResults.BadRequest();
+                return Results.InternalServerError();
             }
-
-            var command = new AddTimeSheetEntry(ResolveTimeSheets(context), timeSheetDate, entryPosted);
-
-            return await command.ExecuteAsync();
-        }
-        catch
-        {
-            return TypedResults.InternalServerError();
-        }
+        });
     }
 
     private static async Task<TimeSheetEntryPosted?> GetBodyAsync(HttpContext context)
@@ -37,7 +35,4 @@ internal static class PostTimeSheetEntryFeature
 
         return JsonSerializer.Deserialize<TimeSheetEntryPosted>(await reader.ReadToEndAsync(context.RequestAborted));
     }
-
-    private static ITimeSheets ResolveTimeSheets(HttpContext context) =>
-        context.RequestServices.GetRequiredService<ITimeSheets>();
 }

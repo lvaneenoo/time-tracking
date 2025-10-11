@@ -1,33 +1,42 @@
-internal class AddTimeSheetEntry(ITimeSheets timeSheets, TrackedDate date, TimeSheetEntryPosted entryPosted)
+internal class AddTimeSheetEntry(HttpContext httpContext, TrackedDate date, TimeSheetEntryPosted entryPosted)
 {
+    private readonly HttpContext _httpContext = httpContext;
     private readonly TimeSheetEntryPosted _entryPosted = entryPosted;
-    private readonly ITimeSheets _timeSheets = timeSheets;
     private readonly TrackedDate _date = date;
 
     public async Task<IResult> ExecuteAsync()
     {
+        var errors = new Dictionary<string, string[]>();
+
         if (!TimeOnly.TryParse(_entryPosted.Start, out var start))
         {
-            return TypedResults.BadRequest();
+            errors.Add(nameof(_entryPosted.Start), []);
         }
 
         if (!TimeOnly.TryParse(_entryPosted.End, out var end))
         {
-            return TypedResults.BadRequest();
+            errors.Add(nameof(_entryPosted.End), []);
         }
 
         if (!Period.TryCreate(start, end, out var period))
         {
-            return TypedResults.BadRequest();
+            errors.Add(nameof(_entryPosted.End), []);
         }
 
-        if (await _timeSheets.FindAsync(_date) is not TimeSheet timeSheet)
+        if (errors.Count > 0)
         {
-            return TypedResults.NotFound();
+            return Results.ValidationProblem(errors);
         }
 
-        _ = timeSheet.AddEntry(period);
+        var timeSheets = _httpContext.RequestServices.GetRequiredService<ITimeSheets>();
 
-        return TypedResults.Created();
+        if (await timeSheets.FindAsync(_date) is not TimeSheet timeSheet)
+        {
+            return Results.NotFound();
+        }
+
+        timeSheet.AddEntry(period!);
+
+        return Results.Created();
     }
 }
