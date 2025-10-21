@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 internal sealed class Period : IComparable<Period>, IEquatable<Period>
 {
-    private Period(TimeOnly start, TimeOnly end)
+    internal Period(TimeOnly start, TimeOnly end)
     {
         Start = start;
         End = end;
@@ -10,16 +10,6 @@ internal sealed class Period : IComparable<Period>, IEquatable<Period>
 
     public TimeOnly End { get; }
     public TimeOnly Start { get; }
-
-    public static Period Create(TimeOnly start, TimeOnly end)
-    {
-        if (start < end)
-        {
-            return new Period(start, end);
-        }
-
-        throw new ArgumentException("[PLACEHOLDER]", nameof(end));
-    }
 
     public static bool TryCreate(TimeOnly start, TimeOnly end, [NotNullWhen(true)] out Period? result)
     {

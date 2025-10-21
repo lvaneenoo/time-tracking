@@ -10,4 +10,13 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Linq.Async" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.10" />
+  </ItemGroup>
+
+  <Target Name="CopyDatabase" AfterTargets="Build">
+    <Copy SourceFiles="..\Database\TimeTracking.db" DestinationFolder="$(OutputPath)" />
+  </Target>
+
 </Project>

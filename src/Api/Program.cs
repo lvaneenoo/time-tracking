@@ -1,6 +1,6 @@
 var builder = WebApplication.CreateBuilder();
 
-builder.Services.AddSingleton<ITimeSheets, TimeSheetsStub>();
+builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 
 var app = builder.Build();
 

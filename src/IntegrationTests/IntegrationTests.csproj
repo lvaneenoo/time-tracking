@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Api\Api.csproj" />
   </ItemGroup>
 
+  <Target Name="CopyDatabase" AfterTargets="Build">
+    <Copy SourceFiles="..\Database\TimeTracking.db" DestinationFolder="$(OutputPath)" />
+  </Target>
+
 </Project>

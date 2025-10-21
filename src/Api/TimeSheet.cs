@@ -1,6 +1,6 @@
 internal class TimeSheet
 {
-    private TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries)
+    internal TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries)
     {
         Date = date;
         Entries = [.. entries];
@@ -8,8 +8,6 @@ internal class TimeSheet
 
     public TrackedDate Date { get; }
     public IReadOnlyList<TimeSheetEntry> Entries { get; }
-
-    public static TimeSheet Create(TrackedDate date, IList<TimeSheetEntry> entries) => new(date, entries);
 
     public override int GetHashCode() => Date.GetHashCode();
     public override string ToString() => Date.ToString();
