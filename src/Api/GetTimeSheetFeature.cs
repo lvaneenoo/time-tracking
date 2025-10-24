@@ -2,18 +2,13 @@ internal static class GetTimeSheetFeature
 {
     public static void AddGetTimeSheetHandler(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/time-sheets/{date}", async (HttpContext context, string date) =>
+        app.MapGet("/time-sheets/{date}", async (HttpContext context, TrackedDate date) =>
         {
             try
             {
-                if (!TrackedDate.TryParse(date, out var timeSheetDate))
-                {
-                    return Results.BadRequest();
-                }
-
                 var timeSheets = context.RequestServices.GetRequiredService<ITimeSheets>();
 
-                if (await timeSheets.FindAsync(timeSheetDate) is not TimeSheet timeSheet)
+                if (await timeSheets.FindAsync(date) is not TimeSheet timeSheet)
                 {
                     return Results.NotFound();
                 }

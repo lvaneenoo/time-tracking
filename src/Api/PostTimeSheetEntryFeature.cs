@@ -4,21 +4,16 @@ internal static class PostTimeSheetEntryFeature
 {
     public static void AddPostTimeSheetEntryHandler(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/time-sheets/{date}/entries", async (HttpContext context, string date) =>
+        app.MapPost("/time-sheets/{date}/entries", async (HttpContext context, TrackedDate date) =>
         {
             try
             {
-                if (!TrackedDate.TryParse(date, out var timeSheetDate))
-                {
-                    return Results.BadRequest();
-                }
-
                 if (await GetBodyAsync(context) is not TimeSheetEntryPosted entryPosted)
                 {
                     return Results.BadRequest();
                 }
 
-                var command = new AddTimeSheetEntry(context, timeSheetDate, entryPosted);
+                var command = new AddTimeSheetEntry(context, date, entryPosted);
 
                 return await command.ExecuteAsync();
             }
