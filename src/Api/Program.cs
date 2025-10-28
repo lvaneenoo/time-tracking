@@ -4,8 +4,8 @@ builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 
 var app = builder.Build();
 
-app.AddGetTimeSheetHandler();
-app.AddPostTimeSheetEntryHandler();
+app.MapGet("/time-sheets/{date}", TimeSheetsEndpoint.GetAsync);
+app.MapPost("/time-sheets/{date}/entries", TimeSheetEntriesEndpoint.PostAsync);
 
 app.Run();
 
