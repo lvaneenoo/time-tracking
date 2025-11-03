@@ -4,6 +4,7 @@ internal static class TimeSheetQueries
         new()
         {
             Date = timeSheet.Date.ToString(),
-            Entries = [.. timeSheet.Entries.Select(entry => entry.ToResource())]
+            Entries = [.. timeSheet.Entries.Select(entry => entry.ToResource())],
+            Status = (int)timeSheet.Status
         };
 }
