@@ -27,28 +27,8 @@ internal class TimeSheets : ITimeSheets
 
         using var reader = await command.ExecuteReaderAsync();
 
-        if (!reader.HasRows)
-        {
-            return null;
-        }
+        var timeSheets = TimeSheetMaterializer.Materialize(reader);
 
-        await reader.ReadAsync();
-        var status = (TimeSheetStatus)reader.GetInt32(1);
-        var entries = new List<TimeSheetEntry>();
-
-        if (reader.ToTimeSheetEntry() is { } firstEntry)
-        {
-            entries.Add(firstEntry);
-        }
-
-        while (await reader.ReadAsync())
-        {
-            if (reader.ToTimeSheetEntry() is { } entry)
-            {
-                entries.Add(entry);
-            }
-        }
-
-        return new TimeSheet(date, entries, status);
+        return await timeSheets.SingleOrDefaultAsync();
     }
 }

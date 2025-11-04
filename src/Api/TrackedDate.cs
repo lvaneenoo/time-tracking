@@ -6,7 +6,7 @@ internal sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<Tracked
 
     private readonly DateOnly _value;
 
-    private TrackedDate(DateOnly value)
+    internal TrackedDate(DateOnly value)
     {
         _value = value;
     }
