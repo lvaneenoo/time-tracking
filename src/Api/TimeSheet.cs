@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 internal class TimeSheet
 {
     internal TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries, TimeSheetStatus status)
@@ -16,15 +14,15 @@ internal class TimeSheet
     public override int GetHashCode() => Date.GetHashCode();
     public override string ToString() => Date.ToString();
 
-    public bool TryAddEntry(Period period, [NotNullWhen(true)] out TimeSheet? result)
+    public (TimeSheet Timesheet, TimeSheetEntry? entry) AddEntry(Period period)
     {
         if (Entries.Any(entry => entry.Period.Overlaps(period)))
         {
-            result = null;
-            return false;
+            return (this, null);
         }
 
-        result = new TimeSheet(Date, [.. Entries, new TimeSheetEntry(period)], Status);
-        return true;
+        var candidate = new TimeSheetEntry(period);
+
+        return (new TimeSheet(Date, [.. Entries, candidate], Status), candidate);
     }
 }

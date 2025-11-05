@@ -2,7 +2,7 @@ internal static class TimeSheetEntriesEndpoint
 {
     public static async Task<IResult> PostAsync(ITimeSheets timeSheets, TrackedDate date, TimeSheetEntryResource body)
     {
-        if (!body.TryGetPeriod(out var period))
+        if (body.ToPeriod() is not { } period)
         {
             return Results.BadRequest();
         }
@@ -12,6 +12,8 @@ internal static class TimeSheetEntriesEndpoint
             return Results.NotFound();
         }
 
-        return timeSheet.TryAddEntry(period, out _) ? Results.Created() : Results.BadRequest();
+        var (_, entry) = timeSheet.AddEntry(period);
+
+        return entry is null ? Results.Conflict() : Results.Created();
     }
 }

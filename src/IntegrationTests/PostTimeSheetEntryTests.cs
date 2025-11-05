@@ -10,9 +10,9 @@ public class PostTimeSheetEntryTests
 {
     [Theory]
     [ClassData(typeof(WorkedHours))]
-    public async Task Post_existing_entry_returns_bad_request(DateOnly date, TimeOnly start, TimeOnly end)
+    public async Task Post_existing_entry_returns_conflict(DateOnly date, TimeOnly start, TimeOnly end)
     {
-        Assert.Equal(HttpStatusCode.BadRequest, await PostAsync(date, start, end));
+        Assert.Equal(HttpStatusCode.Conflict, await PostAsync(date, start, end));
     }
 
     [Theory]
