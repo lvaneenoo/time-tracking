@@ -2,10 +2,19 @@ using System.Data.Common;
 
 internal static class DbDataReaderExtensions
 {
-    public static TimeSheetEntry? ToTimeSheetEntry(this DbDataReader reader) => reader.IsDBNull(2)
-        ? null
-        : new TimeSheetEntry(new Period(CreateStart(reader), CreateEnd(reader)));
+    public static TimeSheetEntry? ToTimeSheetEntry(this DbDataReader reader)
+    {
+        if (reader.IsDBNull(2))
+        {
+            return null;
+        }
 
-    private static TimeOnly CreateEnd(DbDataReader reader) => TimeOnly.FromDateTime(reader.GetDateTime(3));
-    private static TimeOnly CreateStart(DbDataReader reader) => TimeOnly.FromDateTime(reader.GetDateTime(2));
+        return new TimeSheetEntrySnapshot(new TimeSheetEntry(CreatePeriod(reader)))
+        {
+            Id = reader.GetInt64(2)
+        };
+    }
+
+    private static Period CreatePeriod(DbDataReader reader) =>
+        new(TimeOnly.FromDateTime(reader.GetDateTime(3)), TimeOnly.FromDateTime(reader.GetDateTime(4)));
 }

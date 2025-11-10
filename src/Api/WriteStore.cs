@@ -19,6 +19,7 @@ internal class WriteStore
         [
             ["time_sheets", "time_sheet_date"],
             ["time_sheets", "time_sheet_status"],
+            ["time_sheet_entries", "rowid"],
             ["time_sheet_entries", "period_start"],
             ["time_sheet_entries", "period_end"]
         ];

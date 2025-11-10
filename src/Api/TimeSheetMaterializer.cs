@@ -22,11 +22,13 @@ internal class TimeSheetMaterializer
 
         while (await reader.ReadAsync())
         {
-            if (reader.GetDateTime(0) != dateValue)
-            {
-                yield return new TimeSheet(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
+            var dateCandidate = reader.GetDateTime(0);
 
-                dateValue = reader.GetDateTime(0);
+            if (dateCandidate != dateValue)
+            {
+                yield return Create(dateValue, entries, status);
+
+                dateValue = dateCandidate;
                 status = (TimeSheetStatus)reader.GetInt32(1);
                 entries = [];
             }
@@ -37,6 +39,9 @@ internal class TimeSheetMaterializer
             }
         }
 
-        yield return new TimeSheet(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
+        yield return Create(dateValue, entries, status);
     }
+
+    private static TimeSheet Create(DateTime dateValue, List<TimeSheetEntry> entries, TimeSheetStatus status) =>
+        new(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
 }
