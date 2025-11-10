@@ -1,6 +1,6 @@
-internal static class TimeSheetEntryResourceQueries
+internal static class PeriodResourceQueries
 {
-    public static Period? ToPeriod(this TimeSheetEntryResource resource)
+    public static Period? ToValue(this PeriodResource resource)
     {
         if (!TimeOnly.TryParse(resource.Start, out var start))
         {

@@ -35,8 +35,11 @@ public class PostTimeSheetEntryTests
     {
         dynamic entry = new
         {
-            Start = start.ToString("HH:mm"),
-            End = end.ToString("HH:mm")
+            Period = new
+            {
+                End = end.ToString("HH:mm"),
+                Start = start.ToString("HH:mm")
+            }
         };
 
         return new StringContent(JsonSerializer.Serialize(entry), new MediaTypeHeaderValue("application/json"));

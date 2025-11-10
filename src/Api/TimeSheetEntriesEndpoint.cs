@@ -2,7 +2,7 @@ internal static class TimeSheetEntriesEndpoint
 {
     public static async Task<IResult> PostAsync(ITimeSheets timeSheets, TrackedDate date, TimeSheetEntryResource body)
     {
-        if (body.ToPeriod() is not { } period)
+        if (body.Period.ToValue() is not { } period)
         {
             return Results.BadRequest();
         }
