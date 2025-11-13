@@ -1,8 +1,13 @@
 internal static class TimeSheetEntriesEndpoint
 {
-    public static async Task<IResult> PostAsync(ITimeSheets timeSheets, TrackedDate date, PeriodResource body)
+    public static async Task<IResult> PostAsync(ITimeSheets timeSheets, PostTimeSheetEntryRequest request)
     {
-        if (body.ToValue() is not { } period)
+        if (!TrackedDate.TryParse(request.Date, null, out var date))
+        {
+            return Results.BadRequest();
+        }
+
+        if (request.Period.ToValue() is not { } period)
         {
             return Results.BadRequest();
         }

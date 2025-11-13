@@ -11,8 +11,8 @@ builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 
 var app = builder.Build();
 
+app.MapPost("/time-sheet-entries", TimeSheetEntriesEndpoint.PostAsync);
 app.MapGet("/time-sheets/{date}", TimeSheetsEndpoint.GetAsync);
-app.MapPost("/time-sheets/{date}/entries", TimeSheetEntriesEndpoint.PostAsync);
 
 app.Run();
 
