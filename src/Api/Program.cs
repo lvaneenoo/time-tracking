@@ -12,12 +12,16 @@ builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 var app = builder.Build();
 
 app.MapPost("/time-sheet-entries", TimeSheetEntriesEndpoint.PostAsync);
+app.MapDelete("/time-sheet-entries/{id}", TimeSheetEntriesEndpoint.DeleteAsync);
+
 app.MapGet("/time-sheets/{date}", TimeSheetsEndpoint.GetAsync);
 
 app.Run();
 
+
 public partial class Program { }
 
+[JsonSerializable(typeof(PostTimeSheetEntryRequest[]))]
 [JsonSerializable(typeof(TimeSheetEntryResource[]))]
 [JsonSerializable(typeof(TimeSheetResource[]))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext;

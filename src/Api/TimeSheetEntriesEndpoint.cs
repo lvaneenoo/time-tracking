@@ -1,5 +1,7 @@
 internal static class TimeSheetEntriesEndpoint
 {
+    public static Task<IResult> DeleteAsync(TimeSheetEntryId id) => Task.FromResult(Results.NoContent());
+
     public static async Task<IResult> PostAsync(ITimeSheets timeSheets, PostTimeSheetEntryRequest request)
     {
         if (!TrackedDate.TryParse(request.Date, null, out var date))
