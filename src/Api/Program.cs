@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -20,8 +18,3 @@ app.Run();
 
 
 public partial class Program { }
-
-[JsonSerializable(typeof(PostTimeSheetEntryRequest[]))]
-[JsonSerializable(typeof(TimeSheetEntryResource[]))]
-[JsonSerializable(typeof(TimeSheetResource[]))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext;
