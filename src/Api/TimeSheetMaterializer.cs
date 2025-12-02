@@ -1,47 +1,46 @@
-using System.Data.Common;
+using Microsoft.Data.Sqlite;
 
-internal class TimeSheetMaterializer
+internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<TimeSheet>
 {
-    public static async IAsyncEnumerable<TimeSheet> Materialize(DbDataReader reader)
+    private readonly SqliteDataReader _reader = reader;
+
+    public async IAsyncEnumerator<TimeSheet> GetAsyncEnumerator(CancellationToken cancellationToken = default)
     {
-        if (!reader.HasRows)
+        if (!_reader.HasRows)
         {
             yield break;
         }
 
-        await reader.ReadAsync();
+        await _reader.ReadAsync(cancellationToken);
 
-        var dateValue = reader.GetDateTime(0);
-        var status = (TimeSheetStatus)reader.GetInt32(1);
+        var dateValue = _reader.GetDateTime(0);
+        var status = (TimeSheetStatus)_reader.GetInt32(1);
         var entries = new List<TimeSheetEntry>();
 
-        if (reader.ToTimeSheetEntry() is { } firstEntry)
+        if (_reader.ToTimeSheetEntry() is { } firstEntry)
         {
             entries.Add(firstEntry);
         }
 
-        while (await reader.ReadAsync())
+        while (await _reader.ReadAsync(cancellationToken))
         {
-            var dateCandidate = reader.GetDateTime(0);
+            var dateCandidate = _reader.GetDateTime(0);
 
             if (dateCandidate != dateValue)
             {
-                yield return Create(dateValue, entries, status);
+                yield return new TimeSheet(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
 
                 dateValue = dateCandidate;
-                status = (TimeSheetStatus)reader.GetInt32(1);
+                status = (TimeSheetStatus)_reader.GetInt32(1);
                 entries = [];
             }
 
-            if (reader.ToTimeSheetEntry() is { } entry)
+            if (_reader.ToTimeSheetEntry() is { } entry)
             {
                 entries.Add(entry);
             }
         }
 
-        yield return Create(dateValue, entries, status);
+        yield return new TimeSheet(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
     }
-
-    private static TimeSheet Create(DateTime dateValue, List<TimeSheetEntry> entries, TimeSheetStatus status) =>
-        new(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
 }

@@ -19,15 +19,15 @@ internal class TimeSheets : ITimeSheets
     public async Task<TimeSheet?> FindAsync(TrackedDate date)
     {
         using var connection = new SqliteConnection(_connectionString);
-        using var command = new SqliteCommand(WriteStore.Instance.FetchTimeSheetsByDate, connection);
+        using var command = new SqliteCommand(RetrieveTimeSheets.ByDate, connection);
 
-        command.Parameters.Add(new SqliteParameter("@time_sheet_date", (DateOnly)date));
+        command.Parameters.AddRange(new ByTimeSheetDate(date));
 
         await connection.OpenAsync();
 
         using var reader = await command.ExecuteReaderAsync();
 
-        var timeSheets = TimeSheetMaterializer.Materialize(reader);
+        var timeSheets = new TimeSheetMaterializer(reader);
 
         return await timeSheets.SingleOrDefaultAsync();
     }
