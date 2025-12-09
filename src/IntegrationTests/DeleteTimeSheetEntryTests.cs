@@ -5,10 +5,10 @@ namespace IntegrationTests;
 public class DeleteTimeSheetEntryTests
 {
     [Theory]
-    [InlineData(1)]
-    public async Task Delete_returns_no_content(long id)
+    [InlineData(3)]
+    public async Task Delete_non_existent_entry_returns_not_found(long id)
     {
-        Assert.Equal(HttpStatusCode.NoContent, await DeleteAsync(id));
+        Assert.Equal(HttpStatusCode.NotFound, await DeleteAsync(id));
     }
 
     private static async Task<HttpStatusCode> DeleteAsync(long id)

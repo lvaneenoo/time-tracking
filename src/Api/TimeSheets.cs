@@ -1,34 +1,24 @@
-using Microsoft.Data.Sqlite;
-
-internal class TimeSheets : ITimeSheets
+internal class TimeSheets(WriteStore writeStore) : ITimeSheets
 {
-    private readonly string _connectionString;
+    private readonly WriteStore _writeStore = writeStore;
 
-    public TimeSheets(IConfiguration configuration)
+    public async Task<TimeSheet?> FindAsync(TimeSheetEntryId id)
     {
-        var connectionString = configuration.GetConnectionString("WriteStore");
+        using var command = RetrieveTimeSheets.ByTimeSheetEntryId(id);
+        using var reader = await _writeStore.ExecuteReaderAsync(command);
 
-        if (connectionString is null || connectionString.Trim() == "")
-        {
-            throw new InvalidOperationException();
-        }
+        var materializer = new TimeSheetMaterializer(reader);
 
-        _connectionString = connectionString;
+        return await materializer.SingleOrDefaultAsync();
     }
 
     public async Task<TimeSheet?> FindAsync(TrackedDate date)
     {
-        using var connection = new SqliteConnection(_connectionString);
-        using var command = new SqliteCommand(RetrieveTimeSheets.ByDate, connection);
+        using var command = RetrieveTimeSheets.ByTimeSheetDate(date);
+        using var reader = await _writeStore.ExecuteReaderAsync(command);
 
-        command.Parameters.AddRange(new ByTimeSheetDate(date));
+        var materializer = new TimeSheetMaterializer(reader);
 
-        await connection.OpenAsync();
-
-        using var reader = await command.ExecuteReaderAsync();
-
-        var timeSheets = new TimeSheetMaterializer(reader);
-
-        return await timeSheets.SingleOrDefaultAsync();
+        return await materializer.SingleOrDefaultAsync();
     }
 }

@@ -1,6 +1,21 @@
 internal static class TimeSheetEntriesEndpoint
 {
-    public static Task<IResult> DeleteAsync(TimeSheetEntryId id) => Task.FromResult(Results.NoContent());
+    public static async Task<IResult> DeleteAsync(ITimeSheets timeSheets, WriteStore writeStore, TimeSheetEntryId id)
+    {
+        if (await timeSheets.FindAsync(id) is null)
+        {
+            return Results.NotFound();
+        }
+
+        using var command = DeleteTimeSheetEntries.ByTimeSheetEntryId(id);
+
+        return await writeStore.ExecuteNonQueryAsync(command) switch
+        {
+            0 => Results.Conflict(),
+            1 => Results.NoContent(),
+            _ => Results.InternalServerError()
+        };
+    }
 
     public static async Task<IResult> PostAsync(ITimeSheets timeSheets, PostTimeSheetEntryRequest request)
     {
