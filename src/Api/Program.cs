@@ -13,7 +13,15 @@ var app = builder.Build();
 app.MapPost("/time-sheet-entries", TimeSheetEntriesEndpoint.PostAsync);
 app.MapDelete("/time-sheet-entries/{id}", TimeSheetEntriesEndpoint.DeleteAsync);
 
-app.MapGet("/time-sheets/{date}", TimeSheetsEndpoint.GetAsync);
+app.MapGet("/time-sheets/{date}", async (
+    CancellationToken cancellationToken,
+    WriteStore writeStore,
+    TrackedDate date) =>
+{
+    var query = new GetTimeSheet(writeStore, date);
+
+    return await query.ExecuteAsync(cancellationToken);
+});
 
 app.Run();
 

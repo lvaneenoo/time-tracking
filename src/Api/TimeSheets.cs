@@ -1,3 +1,5 @@
+using Microsoft.Data.Sqlite;
+
 internal class TimeSheets(WriteStore writeStore) : ITimeSheets
 {
     private readonly WriteStore _writeStore = writeStore;
@@ -14,7 +16,10 @@ internal class TimeSheets(WriteStore writeStore) : ITimeSheets
 
     public async Task<TimeSheet?> FindAsync(TrackedDate date)
     {
-        using var command = RetrieveTimeSheets.ByTimeSheetDate(date);
+        using var command = new SqliteCommand(RetrieveTimeSheets.ByTimeSheetDate);
+
+        command.Parameters.AddRange(new ByTimeSheetDate(date));
+
         using var reader = await _writeStore.ExecuteReaderAsync(command);
 
         var materializer = new TimeSheetMaterializer(reader);
