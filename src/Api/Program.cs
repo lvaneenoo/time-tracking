@@ -10,8 +10,26 @@ builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 
 var app = builder.Build();
 
-app.MapPost("/time-sheet-entries", TimeSheetEntriesEndpoint.PostAsync);
-app.MapDelete("/time-sheet-entries/{id}", TimeSheetEntriesEndpoint.DeleteAsync);
+app.MapPost("/time-sheet-entries", async (
+    CancellationToken cancellationToken,
+    ITimeSheets timeSheets,
+    PostTimeSheetEntryRequest request) =>
+{
+    var command = new PostTimeSheetEntry(timeSheets, request);
+
+    return await command.ExecuteAsync();
+});
+
+app.MapDelete("/time-sheet-entries/{id}", async (
+    CancellationToken cancellationToken,
+    ITimeSheets timeSheets,
+    WriteStore writeStore,
+    TimeSheetEntryId id) =>
+{
+    var command = new DeleteTimeSheetEntry(timeSheets, writeStore, id);
+
+    return await command.ExecuteAsync(cancellationToken);
+});
 
 app.MapGet("/time-sheets/{date}", async (
     CancellationToken cancellationToken,
