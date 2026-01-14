@@ -11,7 +11,7 @@ internal class GetTimeSheet(WriteStore writeStore, TrackedDate date) : IApplicat
 
         command.Parameters.AddRange(new ByTimeSheetDate(_date));
 
-        using var reader = await _writeStore.ExecuteReaderAsync(command);
+        using var reader = await _writeStore.ExecuteReaderAsync(command, cancellationToken);
 
         var materializer = new TimeSheetResourceMaterializer(reader);
 

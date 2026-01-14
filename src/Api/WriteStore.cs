@@ -17,23 +17,25 @@ internal class WriteStore
         _connectionString = connectionString;
     }
 
-    public async Task<int> ExecuteNonQueryAsync(SqliteCommand command)
+    public async Task<int> ExecuteNonQueryAsync(SqliteCommand command, CancellationToken cancellationToken = default)
     {
         using var connection = new SqliteConnection(_connectionString);
 
         command.Connection = connection;
 
-        await connection.OpenAsync();
+        await connection.OpenAsync(cancellationToken);
 
-        return await command.ExecuteNonQueryAsync();
+        return await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
-    public async Task<SqliteDataReader> ExecuteReaderAsync(SqliteCommand command)
+    public async Task<SqliteDataReader> ExecuteReaderAsync(
+        SqliteCommand command,
+        CancellationToken cancellationToken = default)
     {
         command.Connection = new SqliteConnection(_connectionString);
 
-        await command.Connection.OpenAsync();
+        await command.Connection.OpenAsync(cancellationToken);
 
-        return await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+        return await command.ExecuteReaderAsync(CommandBehavior.CloseConnection, cancellationToken);
     }
 }

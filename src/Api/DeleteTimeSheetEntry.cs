@@ -11,7 +11,7 @@ internal class DeleteTimeSheetEntry(
 
     public async Task<IResult> ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        if (await _timeSheets.FindAsync(_id) is null)
+        if (await _timeSheets.FindAsync(_id, cancellationToken) is null)
         {
             return Results.NotFound();
         }
@@ -20,7 +20,7 @@ internal class DeleteTimeSheetEntry(
 
         command.Parameters.AddRange(new ByTimeSheetEntryId(_id));
 
-        return await _writeStore.ExecuteNonQueryAsync(command) switch
+        return await _writeStore.ExecuteNonQueryAsync(command, cancellationToken) switch
         {
             0 => Results.Conflict(),
             1 => Results.NoContent(),

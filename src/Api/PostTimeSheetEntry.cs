@@ -15,7 +15,7 @@ internal class PostTimeSheetEntry(ITimeSheets timeSheets, PostTimeSheetEntryRequ
             return Results.BadRequest();
         }
 
-        if (await _timeSheets.FindAsync(date) is not { } timeSheet)
+        if (await _timeSheets.FindAsync(date, cancellationToken) is not { } timeSheet)
         {
             return Results.NotFound();
         }
