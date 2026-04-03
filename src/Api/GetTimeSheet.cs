@@ -1,18 +1,35 @@
 using Microsoft.Data.Sqlite;
 
-internal class GetTimeSheet(WriteStore writeStore, TrackedDate date) : IApplicationQuery
+internal class GetTimeSheet : IApplicationQuery
 {
-    private readonly WriteStore _writeStore = writeStore;
-    private readonly TrackedDate _date = date;
+    private readonly TrackedDate _date;
+
+    private readonly string _connectionString;
+
+    public GetTimeSheet(IConfiguration configuration, TrackedDate date)
+    {
+        var connectionString = configuration.GetConnectionString("WriteStore");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException();
+        }
+
+        _connectionString = connectionString;
+        _date = date;
+    }
 
     public async Task<IResult> ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        using var command = new SqliteCommand(RetrieveTimeSheets.ByTimeSheetDate);
+        using var connection = new SqliteConnection(_connectionString);
+        using var command = connection.CreateCommand();
 
-        command.Parameters.AddRange(new ByTimeSheetDate(_date));
+        command.CommandText = RetrieveTimeSheets.ByDate;
+        command.Parameters.AddRange(ByTimeSheetDate.Create(_date));
 
-        using var reader = await _writeStore.ExecuteReaderAsync(command, cancellationToken);
+        await connection.OpenAsync(cancellationToken);
 
+        using var reader = await command.ExecuteReaderAsync(cancellationToken);
         var materializer = new TimeSheetResourceMaterializer(reader);
 
         return await materializer.SingleOrDefaultAsync(cancellationToken) is { } timeSheet

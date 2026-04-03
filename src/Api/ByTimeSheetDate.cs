@@ -1,18 +1,22 @@
 using System.Collections.ObjectModel;
+
 using Microsoft.Data.Sqlite;
 
-internal class ByTimeSheetDate(TrackedDate value) : ReadOnlyCollection<SqliteParameter>(CreateList(value))
+internal class ByTimeSheetDate : ReadOnlyCollection<SqliteParameter>
 {
     private const string TimeSheetDate = "@time_sheet_date";
 
-    private static List<SqliteParameter> CreateList(TrackedDate value)
+    private ByTimeSheetDate(TrackedDate value) : base(CreateList(value))
     {
-        return
+    }
+
+    public static ByTimeSheetDate Create(TrackedDate value) => new(value);
+
+    private static List<SqliteParameter> CreateList(TrackedDate value) =>
         [
-            new SqliteParameter(TimeSheetDate, SqliteType.Text)
+            new(TimeSheetDate, SqliteType.Text)
             {
                 Value = (DateOnly)value
             }
         ];
-    }
 }

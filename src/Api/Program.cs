@@ -5,7 +5,6 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
 
-builder.Services.AddSingleton<WriteStore>();
 builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 
 var app = builder.Build();
@@ -21,22 +20,22 @@ app.MapPost("/time-sheet-entries", async (
 });
 
 app.MapDelete("/time-sheet-entries/{id}", async (
-    CancellationToken cancellationToken,
+    IConfiguration configuration,
     ITimeSheets timeSheets,
-    WriteStore writeStore,
-    TimeSheetEntryId id) =>
+    TimeSheetEntryId id,
+    CancellationToken cancellationToken) =>
 {
-    var command = new DeleteTimeSheetEntry(timeSheets, writeStore, id);
+    var command = new DeleteTimeSheetEntry(configuration, timeSheets, id);
 
     return await command.ExecuteAsync(cancellationToken);
 });
 
 app.MapGet("/time-sheets/{date}", async (
-    CancellationToken cancellationToken,
-    WriteStore writeStore,
-    TrackedDate date) =>
+    IConfiguration configuration,
+    TrackedDate date,
+    CancellationToken cancellationToken) =>
 {
-    var query = new GetTimeSheet(writeStore, date);
+    var query = new GetTimeSheet(configuration, date);
 
     return await query.ExecuteAsync(cancellationToken);
 });

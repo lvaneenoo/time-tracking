@@ -1,13 +1,25 @@
 using Microsoft.Data.Sqlite;
 
-internal class DeleteTimeSheetEntry(
-    ITimeSheets timeSheets,
-    WriteStore writeStore,
-    TimeSheetEntryId id) : IApplicationCommand
+internal class DeleteTimeSheetEntry : IApplicationCommand
 {
-    private readonly ITimeSheets _timeSheets = timeSheets;
-    private readonly WriteStore _writeStore = writeStore;
-    private readonly TimeSheetEntryId _id = id;
+    private readonly TimeSheetEntryId _id;
+    private readonly ITimeSheets _timeSheets;
+
+    private readonly string _connectionString;
+
+    public DeleteTimeSheetEntry(IConfiguration configuration, ITimeSheets timeSheets, TimeSheetEntryId id)
+    {
+        var connectionString = configuration.GetConnectionString("WriteStore");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException();
+        }
+
+        _connectionString = connectionString;
+        _timeSheets = timeSheets;
+        _id = id;
+    }
 
     public async Task<IResult> ExecuteAsync(CancellationToken cancellationToken = default)
     {
@@ -16,11 +28,13 @@ internal class DeleteTimeSheetEntry(
             return Results.NotFound();
         }
 
-        using var command = new SqliteCommand(DeleteTimeSheetEntries.ByTimeSheetEntryId);
+        using var connection = new SqliteConnection(_connectionString);
+        using var command = connection.CreateCommand();
 
-        command.Parameters.AddRange(new ByTimeSheetEntryId(_id));
+        command.CommandText =  DeleteTimeSheetEntries.ById;
+        command.Parameters.AddRange(ByTimeSheetEntryId.Create(_id));
 
-        return await _writeStore.ExecuteNonQueryAsync(command, cancellationToken) switch
+        return await command.ExecuteNonQueryAsync(cancellationToken) switch
         {
             0 => Results.Conflict(),
             1 => Results.NoContent(),
