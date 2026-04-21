@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-internal sealed class Period : IComparable<Period>, IEquatable<Period>
+public sealed class Period : IComparable<Period>, IEquatable<Period>
 {
     internal Period(TimeOnly start, TimeOnly end)
     {

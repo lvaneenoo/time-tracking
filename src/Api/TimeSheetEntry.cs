@@ -1,4 +1,4 @@
-internal class TimeSheetEntry
+public class TimeSheetEntry
 {
     internal TimeSheetEntry(Period period)
     {

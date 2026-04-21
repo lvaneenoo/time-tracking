@@ -1,4 +1,4 @@
-internal class TimeSheet
+public class TimeSheet
 {
     internal TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries, TimeSheetStatus status)
     {

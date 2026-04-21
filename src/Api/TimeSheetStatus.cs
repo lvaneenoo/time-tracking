@@ -1,4 +1,4 @@
-internal enum TimeSheetStatus
+public enum TimeSheetStatus
 {
     Created
 }

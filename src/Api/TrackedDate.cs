@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-internal sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<TrackedDate>, IParsable<TrackedDate>
+public sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<TrackedDate>, IParsable<TrackedDate>
 {
     private const string Format = "yyyy-MM-dd";
 
@@ -20,9 +20,10 @@ internal sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<Tracked
         throw new NotImplementedException();
     }
 
-    public static bool TryParse([NotNullWhen(true)] string? s,
-                                IFormatProvider? provider,
-                                [MaybeNullWhen(false)] out TrackedDate result)
+    public static bool TryParse(
+        [NotNullWhen(true)] string? s,
+        IFormatProvider? provider,
+        [MaybeNullWhen(false)] out TrackedDate result)
     {
         if (!DateOnly.TryParseExact(s, Format, out DateOnly value))
         {

@@ -16,6 +16,10 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="UnitTests" />
+  </ItemGroup>
+
   <Target Name="CopyDatabase" AfterTargets="Build">
     <Copy SourceFiles="..\Database\SQLite\TimeTracking.db" DestinationFolder="$(OutputPath)" />
   </Target>
