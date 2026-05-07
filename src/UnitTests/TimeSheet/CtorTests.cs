@@ -1,17 +1,9 @@
-namespace UnitTests;
+namespace TimeSheetTests;
 
-public class TimeSheetTests
+public class CtorTests
 {
-    public static TheoryData<TrackedDate, IList<TimeSheetEntry>, TimeSheetStatus> GetData()
-    {
-        return new()
-        {
-            { new TrackedDate(DateOnly.MinValue), [], TimeSheetStatus.Created }
-        };
-    }
-
     [Theory]
-    [MemberData(nameof(GetData))]
+    [ClassData(typeof(CtorTestArgs))]
     public void TestCtor(TrackedDate date, IList<TimeSheetEntry> entries, TimeSheetStatus status)
     {
         var sheet = new TimeSheet(date, entries, status);
