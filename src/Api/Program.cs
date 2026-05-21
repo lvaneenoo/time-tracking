@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -19,13 +21,15 @@ app.MapPost("/time-sheet-entries", async (
     return await command.ExecuteAsync();
 });
 
-app.MapDelete("/time-sheet-entries/{id}", async (
+app.MapDelete("/time-sheet-entries", async (
     IConfiguration configuration,
     ITimeSheets timeSheets,
-    TimeSheetEntryId id,
+    TrackedDate date,
+    [FromQuery(Name = "period-start")] TimeOnly periodStart,
+    [FromQuery(Name = "period-end")] TimeOnly periodEnd,
     CancellationToken cancellationToken) =>
 {
-    var command = new DeleteTimeSheetEntry(configuration, timeSheets, id);
+    var command = new DeleteTimeSheetEntry(configuration, timeSheets, date, periodStart, periodEnd);
 
     return await command.ExecuteAsync(cancellationToken);
 });

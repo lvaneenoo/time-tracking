@@ -16,22 +16,14 @@ internal class TimeSheets : ITimeSheets
         _connectionString = connectionString;
     }
 
-    public async Task<TimeSheet?> FindAsync(TrackedDate date, CancellationToken cancellationToken = default) =>
-        await FindAsync(RetrieveTimeSheets.ByDate, ByTimeSheetDate.Create(date), cancellationToken);
-
-    public async Task<TimeSheet?> FindAsync(TimeSheetEntryId entryId, CancellationToken cancellationToken = default) =>
-        await FindAsync(RetrieveTimeSheets.ByEntryId, ByTimeSheetEntryId.Create(entryId), cancellationToken);
-
-    private async Task<TimeSheet?> FindAsync(
-        string commandText,
-        IEnumerable<SqliteParameter> parameters,
-        CancellationToken cancellationToken = default)
+    public async Task<TimeSheet?> FindAsync(TrackedDate date, CancellationToken cancellationToken = default)
     {
         using var connection = new SqliteConnection(_connectionString);
         using var command = connection.CreateCommand();
 
-        command.CommandText = commandText;
-        command.Parameters.AddRange(parameters);
+        command.CommandText = RetrieveTimeSheets.ByDate;
+
+        command.Parameters.AddRange(date.ResolveParameters());
 
         await connection.OpenAsync(cancellationToken);
 
