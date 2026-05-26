@@ -3,7 +3,7 @@ using Microsoft.Data.Sqlite;
 
 internal static class PeriodQueries
 {
-    private const string Format = "hh:mm:ss.fffffff";
+    private const string Format = "HH:mm";
 
     private const string PeriodEnd = "@period_end";
     private const string PeriodStart = "@period_start";
