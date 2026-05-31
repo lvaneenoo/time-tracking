@@ -10,7 +10,9 @@ internal static class PeriodQueries
 
     public static bool Overlaps(this Period period, Period other) => period.StartsIn(other) || period.EndsIn(other);
 
-    public static ReadOnlyCollection<SqliteParameter> ResolveParameters(this Period period) =>
+    public static ReadOnlyCollection<SqliteParameter> ResolveParameters(this Period period)
+    {
+        return
         [
             new(PeriodStart, SqliteType.Text)
             {
@@ -21,10 +23,24 @@ internal static class PeriodQueries
                 Value = period.End.ToString(Format)
             }
         ];
+    }
 
-    private static bool EndsIn(this Period period, Period other) =>
-        other.Start <= period.End && period.End <= other.End;
+    public static PeriodResource ToResource(this Period period)
+    {
+        return new()
+        {
+            End = period.End.ToString(Format),
+            Start = period.Start.ToString(Format)
+        };
+    }
 
-    private static bool StartsIn(this Period period, Period other) =>
-        other.Start <= period.Start && period.Start <= other.End;
+    private static bool EndsIn(this Period period, Period other)
+    {
+        return other.Start <= period.End && period.End <= other.End;
+    }
+
+    private static bool StartsIn(this Period period, Period other)
+    {
+        return other.Start <= period.Start && period.Start <= other.End;
+    }
 }

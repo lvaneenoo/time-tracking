@@ -37,9 +37,10 @@ app.MapDelete("/time-sheet-entries", async (
 app.MapGet("/time-sheets/{date}", async (
     IConfiguration configuration,
     TrackedDate date,
+    HttpContext httpContext,
     CancellationToken cancellationToken) =>
 {
-    var query = new GetTimeSheet(configuration, date);
+    var query = new GetTimeSheet(configuration, date, httpContext);
 
     return await query.ExecuteAsync(cancellationToken);
 });

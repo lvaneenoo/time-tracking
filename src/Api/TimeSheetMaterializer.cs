@@ -17,6 +17,8 @@ internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable
         var status = (TimeSheetStatus)_reader.GetInt32(1);
         var entries = new List<TimeSheetEntry>();
 
+        var modifiedOn = _reader.GetDateTimeOffset(2);
+
         if (_reader.ToTimeSheetEntry() is { } firstEntry)
         {
             entries.Add(firstEntry);
@@ -28,11 +30,16 @@ internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable
 
             if (dateCandidate != dateValue)
             {
-                yield return new TimeSheet(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
+                yield return new TimeSheetSnapshot(new TimeSheet(dateValue.ToTrackedDate(), entries, status))
+                {
+                    ModifiedOn = modifiedOn
+                };
 
                 dateValue = dateCandidate;
                 status = (TimeSheetStatus)_reader.GetInt32(1);
                 entries = [];
+
+                modifiedOn = _reader.GetDateTimeOffset(2);
             }
 
             if (_reader.ToTimeSheetEntry() is { } entry)
@@ -41,6 +48,9 @@ internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable
             }
         }
 
-        yield return new TimeSheet(new TrackedDate(DateOnly.FromDateTime(dateValue)), entries, status);
+        yield return new TimeSheetSnapshot(new TimeSheet(dateValue.ToTrackedDate(), entries, status))
+        {
+            ModifiedOn = modifiedOn
+        };
     }
 }
