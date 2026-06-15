@@ -35,12 +35,12 @@ app.MapDelete("/time-sheet-entries", async (
 });
 
 app.MapGet("/time-sheets/{date}", async (
-    IConfiguration configuration,
+    ITimeSheets timeSheets,
     TrackedDate date,
     HttpContext httpContext,
     CancellationToken cancellationToken) =>
 {
-    var query = new GetTimeSheet(configuration, date, httpContext);
+    var query = new GetTimeSheet(timeSheets, date, httpContext);
 
     return await query.ExecuteAsync(cancellationToken);
 });

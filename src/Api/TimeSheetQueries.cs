@@ -12,6 +12,13 @@ internal static class TimeSheetQueries
         return (sheet.Create([.. sheet.Entries, candidate]), candidate);
     }
 
+    public static string CreateResourceId(this TimeSheet sheet)
+    {
+        var snapshot = (TimeSheetSnapshot)sheet;
+
+        return $"{Math.Abs(snapshot.ModifiedOn.GetHashCode())}";
+    }
+
     public static TimeSheetResource ToResource(this TimeSheet sheet)
     {
         return new TimeSheetResource

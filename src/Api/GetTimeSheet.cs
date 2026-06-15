@@ -1,51 +1,28 @@
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 
-internal class GetTimeSheet : IApplicationQuery
+internal class GetTimeSheet(ITimeSheets timeSheets, TrackedDate date, HttpContext httpContext) : IApplicationQuery
 {
-    private readonly HttpContext _httpContext;
-    private readonly TrackedDate _date;
+    private readonly ITimeSheets _timeSheets = timeSheets;
 
-    private readonly string _connectionString;
-
-    public GetTimeSheet(IConfiguration configuration, TrackedDate date, HttpContext httpContext)
-    {
-        var connectionString = configuration.GetConnectionString("WriteStore");
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            throw new InvalidOperationException();
-        }
-
-        _connectionString = connectionString;
-
-        _date = date;
-        _httpContext = httpContext;
-    }
+    private readonly HttpContext _httpContext = httpContext;
+    private readonly TrackedDate _date = date;
 
     public async Task<IResult> ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        using var connection = new SqliteConnection(_connectionString);
-        using var command = connection.CreateCommand();
-
-        command.CommandText = RetrieveTimeSheets.ByDate;
-
-        command.Parameters.AddRange(_date.ResolveParameters());
-
-        await connection.OpenAsync(cancellationToken);
-
-        using var reader = await command.ExecuteReaderAsync(cancellationToken);
-        var materializer = new TimeSheetMaterializer(reader);
-
-        if (await materializer.SingleOrDefaultAsync(cancellationToken) is not { } sheet)
+        if (await _timeSheets.FindAsync(_date, cancellationToken) is not { } sheet)
         {
             return Results.NotFound();
         }
 
-        var snapshot = (TimeSheetSnapshot)sheet;
-        var hashCode = snapshot.ModifiedOn.GetHashCode();
+        var resourceId = $"\"{sheet.CreateResourceId()}\"";
 
-        _httpContext.Response.Headers.ETag = new StringValues(hashCode.ToString());
+        if (_httpContext.Request.Headers.TryGetValue(HeaderNames.IfNoneMatch, out var value) && value == resourceId)
+        {
+            return Results.StatusCode(304);
+        }
+
+        _httpContext.Response.Headers.ETag = new StringValues(resourceId);
 
         return Results.Ok(sheet.ToResource());
     }
