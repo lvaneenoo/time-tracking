@@ -21,10 +21,11 @@ internal class PostTimeSheetEntry(DateOnly date, TimeOnly periodStart, TimeOnly 
         using var factory = new WebApplicationFactory<Program>();
         using var client = factory.CreateClient();
 
-        dynamic request = new
+        var request = new PostTimeSheetEntryRequest
         {
+            Comment = "",
             Date = _date.ToString(DateFormat),
-            Period = new
+            Period = new PeriodResource
             {
                 End = _periodEnd.ToString(TimeFormat),
                 Start = _periodStart.ToString(TimeFormat)
@@ -36,6 +37,8 @@ internal class PostTimeSheetEntry(DateOnly date, TimeOnly periodStart, TimeOnly 
         return response.StatusCode;
     }
 
-    private static StringContent CreateContent(dynamic request) =>
-        new(JsonSerializer.Serialize(request), new MediaTypeHeaderValue(JsonMediaType));
+    private static StringContent CreateContent(PostTimeSheetEntryRequest request)
+    {
+        return new(JsonSerializer.Serialize(request), new MediaTypeHeaderValue(JsonMediaType));
+    }
 }

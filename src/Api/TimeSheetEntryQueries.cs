@@ -4,6 +4,7 @@ internal static class TimeSheetEntryQueries
     {
         return new TimeSheetEntryResource
         {
+            Comment = entry.Comment,
             Period = entry.Period.ToResource()
         };
     }

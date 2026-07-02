@@ -6,7 +6,7 @@ internal static class SqliteDataReaderExtensions
     {
         return reader.IsDBNull(3)
             ? null
-            : new TimeSheetEntry(reader.ToPeriod());
+            : new TimeSheetEntry(reader.ToPeriod(), reader.GetString(5));
     }
 
     private static Period ToPeriod(this SqliteDataReader reader)

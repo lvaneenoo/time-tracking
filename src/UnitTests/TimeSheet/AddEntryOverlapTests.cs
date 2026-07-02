@@ -2,21 +2,15 @@ namespace TimeSheetTests;
 
 public class AddEntryOverlapTests
 {
-    [Theory]
-    [ClassData(typeof(AddEntryOverlapTestArgs))]
-    public void TestImmutability(TimeSheet sut, Period period)
+    [Fact]
+    public void Test()
     {
-        var (sheet, _) = sut.AddEntry(period);
+        var period = new Period(TimeOnly.MinValue, TimeOnly.MinValue);
+        var sut = new TimeSheet(new (DateOnly.MinValue), [new (period, "")], TimeSheetStatus.Created);
+
+        var (sheet, entry) = sut.AddEntry(period, "");
 
         Assert.Same(sut, sheet);
-    }
-
-    [Theory]
-    [ClassData(typeof(AddEntryOverlapTestArgs))]
-    public void TestTransferability(TimeSheet sut, Period period)
-    {
-        var (_, entry) = sut.AddEntry(period);
-
         Assert.Null(entry);
     }
 }

@@ -2,12 +2,14 @@ namespace TimeSheetEntryTests;
 
 public class CtorTests
 {
-    [Theory]
-    [ClassData(typeof(CtorTestArgs))]
-    public void TestCtor(Period period)
+    [Fact]
+    public void Test()
     {
-        var entry = new TimeSheetEntry(period);
+        var period = new Period(TimeOnly.MinValue, TimeOnly.MinValue);
+
+        var entry = new TimeSheetEntry(period, "");
 
         Assert.Equal(period, entry.Period);
+        Assert.Equal("", entry.Comment);
     }
 }

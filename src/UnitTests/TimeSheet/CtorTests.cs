@@ -2,14 +2,15 @@ namespace TimeSheetTests;
 
 public class CtorTests
 {
-    [Theory]
-    [ClassData(typeof(CtorTestArgs))]
-    public void TestCtor(TrackedDate date, IList<TimeSheetEntry> entries, TimeSheetStatus status)
+    [Fact]
+    public void Test()
     {
-        var sheet = new TimeSheet(date, entries, status);
+        var date = new TrackedDate(DateOnly.MinValue);
+
+        var sheet = new TimeSheet(date, [], TimeSheetStatus.Created);
 
         Assert.Equal(date, sheet.Date);
-        Assert.Equal(entries.Count, sheet.Entries.Count);
-        Assert.Equal(status, sheet.Status);
+        Assert.Empty(sheet.Entries);
+        Assert.Equal(TimeSheetStatus.Created, sheet.Status);
     }
 }

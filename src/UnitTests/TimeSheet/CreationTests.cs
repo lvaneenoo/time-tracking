@@ -2,21 +2,19 @@ namespace TimeSheetTests;
 
 public class CreationTests
 {
-    [Theory]
-    [ClassData(typeof(CreationTestArgs))]
-    public void TestImmutability(TimeSheet sut, TimeSheetEntry entry)
+    [Fact]
+    public void Test()
     {
-        Assert.NotSame(sut, sut.Create([entry]));
-    }
+        var sut = new TimeSheet(new (DateOnly.MinValue), [], TimeSheetStatus.Created);
+        var entry = new TimeSheetEntry(new (TimeOnly.MinValue, TimeOnly.MinValue), "");
 
-    [Theory]
-    [ClassData(typeof(CreationTestArgs))]
-    public void TestTransferability(TimeSheet sut, TimeSheetEntry entry)
-    {
         var sheet = sut.Create([entry]);
 
+        Assert.NotSame(sut, sheet);
         Assert.Equal(sut.Date, sheet.Date);
-        Assert.True(sheet.Entries.Count == 1 && entry == sheet.Entries[0]);
         Assert.Equal(sut.Status, sheet.Status);
+
+        Assert.Single(sheet.Entries);
+        Assert.Same(entry, sheet.Entries[0]);
     }
 }

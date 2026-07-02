@@ -1,12 +1,11 @@
 public class TimeSheetEntry
 {
-    internal TimeSheetEntry(Period period)
+    internal TimeSheetEntry(Period period, string comment)
     {
         Period = period;
+        Comment = comment;
     }
 
+    public string Comment { get; }
     public Period Period { get; }
-
-    public override int GetHashCode() => Period.GetHashCode();
-    public override string ToString() => Period.ToString();
 }

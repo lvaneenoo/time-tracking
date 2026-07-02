@@ -20,7 +20,7 @@ internal class PostTimeSheetEntry(ITimeSheets timeSheets, PostTimeSheetEntryRequ
             return Results.NotFound();
         }
 
-        var (_, entry) = timeSheet.AddEntry(period);
+        var (_, entry) = timeSheet.AddEntry(period, _request.Comment);
 
         return entry is null ? Results.Conflict() : Results.Created();
     }
