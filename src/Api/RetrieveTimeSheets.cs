@@ -1,10 +1,17 @@
 internal class RetrieveTimeSheets
 {
     public static string ByDate { get; } = @"
-        SELECT time_sheets.time_sheet_date, time_sheets.time_sheet_status, time_sheets.modified_on, time_sheet_entries.period_start, time_sheet_entries.period_end, time_sheet_entries.comment
-        FROM time_sheets
+           SELECT time_sheets.time_sheet_date,
+                  time_sheets.time_sheet_status,
+                  time_sheets.modified_on,
+                  time_sheet_entries.period_start,
+                  time_sheet_entries.period_end,
+                  time_sheet_entries.comment
+             FROM time_sheets
         LEFT JOIN time_sheet_entries
-        ON time_sheets.time_sheet_date = time_sheet_entries.time_sheet_date
-        WHERE time_sheets.time_sheet_date = @time_sheet_date
+               ON time_sheets.time_sheet_date = time_sheet_entries.time_sheet_date
+            WHERE time_sheets.time_sheet_date = @time_sheet_date
+         ORDER BY time_sheets.time_sheet_date,
+                  time_sheet_entries.period_start
         ";
 }
