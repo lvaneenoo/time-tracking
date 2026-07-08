@@ -1,8 +1,8 @@
 internal static class TrackedDateQueries
 {
-    public static TimeSheet Resolve(this TrackedDate date)
+    public static TimeSheetSnapshot CreateTimeSheet(this TrackedDate date)
     {
-        return new TimeSheetSnapshot(new(date, [], TimeSheetStatus.Created))
+        return new(new TimeSheet(date, [], TimeSheetStatus.Created))
         {
             ModifiedOn = DateTimeOffset.MinValue
         };

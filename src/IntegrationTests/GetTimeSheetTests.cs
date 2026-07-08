@@ -9,7 +9,7 @@ public class GetTimeSheetTests(TimeTrackingFactory factory) : IClassFixture<Time
     public async Task ReturnsNotModifiedAsync()
     {
         var date = new TrackedDate(new DateOnly(2025, 1, 1));
-        var sheet = date.Resolve();
+        var sheet = date.CreateTimeSheet();
 
         var response = await GetTimeSheetAsync(sheet, sheet.CreateResourceId());
 
@@ -21,7 +21,7 @@ public class GetTimeSheetTests(TimeTrackingFactory factory) : IClassFixture<Time
     {
         var date = new TrackedDate(new DateOnly(2025, 1, 1));
 
-        var response = await GetTimeSheetAsync(date.Resolve());
+        var response = await GetTimeSheetAsync(date.CreateTimeSheet());
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }

@@ -16,7 +16,7 @@ internal class DeleteTimeSheetEntry : IApplicationCommand
         TimeOnly periodStart,
         TimeOnly periodEnd)
     {
-        var connectionString = configuration.GetConnectionString("WriteStore");
+        string? connectionString = configuration.GetConnectionString("WriteStore");
 
         if (string.IsNullOrWhiteSpace(connectionString))
         {
@@ -48,8 +48,8 @@ internal class DeleteTimeSheetEntry : IApplicationCommand
 
         command.CommandText = DeleteTimeSheetEntries.ByDateAndPeriod;
 
-        command.Parameters.AddRange(_date.ResolveParameters());
-        command.Parameters.AddRange(period.ResolveParameters());
+        command.Parameters.AddRange(_date.Resolve());
+        command.Parameters.AddRange(period.Resolve());
 
         await connection.OpenAsync(cancellationToken);
 

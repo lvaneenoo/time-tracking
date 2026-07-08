@@ -6,7 +6,7 @@ internal class TimeSheets : ITimeSheets
 
     public TimeSheets(IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("WriteStore");
+        string? connectionString = configuration.GetConnectionString("WriteStore");
 
         if (string.IsNullOrWhiteSpace(connectionString))
         {
@@ -23,7 +23,7 @@ internal class TimeSheets : ITimeSheets
 
         command.CommandText = RetrieveTimeSheets.ByDate;
 
-        command.Parameters.AddRange(date.ResolveParameters());
+        command.Parameters.AddRange(date.Resolve());
 
         await connection.OpenAsync(cancellationToken);
 

@@ -3,24 +3,21 @@ using Microsoft.Data.Sqlite;
 
 internal static class PeriodQueries
 {
-    private const string Format = "HH:mm";
-
-    private const string PeriodEnd = "@period_end";
-    private const string PeriodStart = "@period_start";
+    private const string TimeOfDay = "HH:mm";
 
     public static bool Overlaps(this Period period, Period other) => period.StartsIn(other) || period.EndsIn(other);
 
-    public static ReadOnlyCollection<SqliteParameter> ResolveParameters(this Period period)
+    public static ReadOnlyCollection<SqliteParameter> Resolve(this Period period)
     {
         return
         [
-            new(PeriodStart, SqliteType.Text)
+            new($"@{TimeSheetEntryTable.PeriodStart}", SqliteType.Text)
             {
-                Value = period.Start.ToString(Format)
+                Value = period.Start.ToString(TimeOfDay)
             },
-            new(PeriodEnd, SqliteType.Text)
+            new($"@{TimeSheetEntryTable.PeriodEnd}", SqliteType.Text)
             {
-                Value = period.End.ToString(Format)
+                Value = period.End.ToString(TimeOfDay)
             }
         ];
     }
@@ -29,8 +26,8 @@ internal static class PeriodQueries
     {
         return new()
         {
-            End = period.End.ToString(Format),
-            Start = period.Start.ToString(Format)
+            End = period.End.ToString(TimeOfDay),
+            Start = period.Start.ToString(TimeOfDay)
         };
     }
 
