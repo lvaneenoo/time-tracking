@@ -13,11 +13,11 @@ internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable
 
         await _reader.ReadAsync(cancellationToken);
 
-        var dateValue = _reader.GetDateTime(0);
-        var status = (TimeSheetStatus)_reader.GetInt32(1);
+        var date = _reader.GetDate();
+        var status = _reader.GetStatus();
         var entries = new List<TimeSheetEntry>();
 
-        var modifiedOn = _reader.GetDateTimeOffset(2);
+        var modifiedOn = _reader.GetModifiedOn();
 
         if (_reader.ToTimeSheetEntry() is { } firstEntry)
         {
@@ -26,20 +26,20 @@ internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable
 
         while (await _reader.ReadAsync(cancellationToken))
         {
-            var dateCandidate = _reader.GetDateTime(0);
+            var dateCandidate = _reader.GetDate();
 
-            if (dateCandidate != dateValue)
+            if (dateCandidate != date)
             {
-                yield return new TimeSheetSnapshot(new TimeSheet(dateValue.ToTrackedDate(), entries, status))
+                yield return new TimeSheetSnapshot(Create(date, entries, status))
                 {
                     ModifiedOn = modifiedOn
                 };
 
-                dateValue = dateCandidate;
-                status = (TimeSheetStatus)_reader.GetInt32(1);
+                date = dateCandidate;
+                status = _reader.GetStatus();
                 entries = [];
 
-                modifiedOn = _reader.GetDateTimeOffset(2);
+                modifiedOn = _reader.GetModifiedOn();
             }
 
             if (_reader.ToTimeSheetEntry() is { } entry)
@@ -48,9 +48,14 @@ internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable
             }
         }
 
-        yield return new TimeSheetSnapshot(new TimeSheet(dateValue.ToTrackedDate(), entries, status))
+        yield return new TimeSheetSnapshot(Create(date, entries, status))
         {
             ModifiedOn = modifiedOn
         };
+    }
+
+    private static TimeSheet Create(DateTime date, IList<TimeSheetEntry> entries, int status)
+    {
+        return new(date.ToTrackedDate(), entries, (TimeSheetStatus)status);
     }
 }
