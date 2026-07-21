@@ -1,9 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 
-public sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<TrackedDate>, IParsable<TrackedDate>
+public sealed class TrackedDate
+    : IComparable<TrackedDate>,
+      IEquatable<TrackedDate>,
+      IFormattable,
+      IParsable<TrackedDate>
 {
-    private const string Format = "yyyy-MM-dd";
-
     private static readonly DateOnly MinValue = new(2025, 1, 1);
 
     private readonly DateOnly _value;
@@ -25,7 +27,7 @@ public sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<TrackedDa
         IFormatProvider? provider,
         [MaybeNullWhen(false)] out TrackedDate result)
     {
-        if (!DateOnly.TryParseExact(s, Format, out DateOnly value))
+        if (!DateOnly.TryParseExact(s, "yyyy-MM-dd", out DateOnly value))
         {
             result = null;
             return false;
@@ -44,10 +46,14 @@ public sealed class TrackedDate : IComparable<TrackedDate>, IEquatable<TrackedDa
     private static bool IsInRange(DateOnly value) => MinValue <= value;
 
     public int CompareTo(TrackedDate? other) => other is null ? 1 : _value.CompareTo(other._value);
+
     public bool Equals(TrackedDate? other) => other is not null && _value == other._value;
     public override bool Equals(object? obj) => Equals(obj as TrackedDate);
+
     public override int GetHashCode() => _value.GetHashCode();
-    public override string ToString() => _value.ToString(Format);
+
+    public override string ToString() => _value.ToString();
+    public string ToString(string? format, IFormatProvider? formatProvider) => _value.ToString(format, formatProvider);
 
     public static bool operator ==(TrackedDate? a, TrackedDate? b) => a is not null && a.Equals(b);
     public static bool operator !=(TrackedDate? a, TrackedDate? b) => !(a == b);

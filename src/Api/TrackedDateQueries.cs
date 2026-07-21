@@ -14,7 +14,7 @@ internal static class TrackedDateQueries
         [
             new($"@{TimeSheetTable.Date}", SqliteType.Text)
             {
-                Value = date.ToString()
+                Value = date.ToString("yyyy-MM-dd", null)
             }
         ];
     }

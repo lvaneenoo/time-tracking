@@ -23,7 +23,7 @@ internal static class TimeSheetQueries
     {
         return new TimeSheetResource
         {
-            Date = sheet.Date.ToString(),
+            Date = sheet.Date.ToString("yyyy-MM-dd", null),
             Entries = [.. sheet.Entries.Select(entry => entry.ToResource())],
             Status = (int)sheet.Status
         };
