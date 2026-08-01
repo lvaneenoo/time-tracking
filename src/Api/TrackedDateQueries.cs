@@ -12,7 +12,7 @@ internal static class TrackedDateQueries
     {
         return
         [
-            new($"@{TimeSheetTable.Date}", SqliteType.Text)
+            new SqliteParameter($"@{TimeSheetTable.Date}", SqliteType.Text)
             {
                 Value = date.ToString("yyyy-MM-dd", null)
             }

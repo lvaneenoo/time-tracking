@@ -1,5 +1,5 @@
-internal class TimeSheetEntryTable
+internal static class TimeSheetEntryTable
 {
-    public static string PeriodEnd { get; } = "period_end";
-    public static string PeriodStart { get; } = "period_start";
+    public static readonly string PeriodEnd = "period_end";
+    public static readonly string PeriodStart = "period_start";
 }

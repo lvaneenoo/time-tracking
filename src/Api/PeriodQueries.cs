@@ -11,11 +11,11 @@ internal static class PeriodQueries
     {
         return
         [
-            new($"@{TimeSheetEntryTable.PeriodStart}", SqliteType.Text)
+            new SqliteParameter($"@{TimeSheetEntryTable.PeriodStart}", SqliteType.Text)
             {
                 Value = period.Start.ToString(TimeOfDay)
             },
-            new($"@{TimeSheetEntryTable.PeriodEnd}", SqliteType.Text)
+            new SqliteParameter($"@{TimeSheetEntryTable.PeriodEnd}", SqliteType.Text)
             {
                 Value = period.End.ToString(TimeOfDay)
             }

@@ -23,13 +23,12 @@ app.MapPost("/time-sheet-entries", async (
 
 app.MapDelete("/time-sheet-entries", async (
     IConfiguration configuration,
-    ITimeSheets timeSheets,
-    TrackedDate date,
+    [FromQuery(Name = "date")] TrackedDate date,
     [FromQuery(Name = "period-start")] TimeOnly periodStart,
     [FromQuery(Name = "period-end")] TimeOnly periodEnd,
     CancellationToken cancellationToken) =>
 {
-    var command = new DeleteTimeSheetEntry(configuration, timeSheets, date, periodStart, periodEnd);
+    var command = new DeleteTimeSheetEntry(configuration, date, periodStart, periodEnd);
 
     return await command.ExecuteAsync(cancellationToken);
 });

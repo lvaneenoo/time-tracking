@@ -1,4 +1,4 @@
-internal class TimeSheetTable
+internal static class TimeSheetTable
 {
-    public static string Date { get; } = "time_sheet_date";
+    public static readonly string Date = "time_sheet_date";
 }

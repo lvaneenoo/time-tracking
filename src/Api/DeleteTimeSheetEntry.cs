@@ -2,8 +2,6 @@ using Microsoft.Data.Sqlite;
 
 internal class DeleteTimeSheetEntry : IApplicationCommand
 {
-    private readonly ITimeSheets _timeSheets;
-
     private readonly TimeOnly _periodEnd, _periodStart;
     private readonly TrackedDate _date;
 
@@ -11,7 +9,6 @@ internal class DeleteTimeSheetEntry : IApplicationCommand
 
     public DeleteTimeSheetEntry(
         IConfiguration configuration,
-        ITimeSheets timeSheets,
         TrackedDate date,
         TimeOnly periodStart,
         TimeOnly periodEnd)
@@ -25,7 +22,6 @@ internal class DeleteTimeSheetEntry : IApplicationCommand
 
         _connectionString = connectionString;
 
-        _timeSheets = timeSheets;
         _date = date;
         _periodStart = periodStart;
         _periodEnd = periodEnd;
@@ -36,11 +32,6 @@ internal class DeleteTimeSheetEntry : IApplicationCommand
         if (!Period.TryCreate(_periodStart, _periodEnd, out var period))
         {
             return Results.BadRequest();
-        }
-
-        if (await _timeSheets.FindAsync(_date, cancellationToken) is null)
-        {
-            return Results.NotFound();
         }
 
         using var connection = new SqliteConnection(_connectionString);
