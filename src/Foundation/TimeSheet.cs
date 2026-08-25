@@ -10,6 +10,4 @@ public class TimeSheet
     public TrackedDate Date { get; }
     public IReadOnlyList<TimeSheetEntry> Entries { get; }
     public TimeSheetStatus Status { get; }
-
-    internal TimeSheet Create(IList<TimeSheetEntry> entries) => new(Date, entries, Status);
 }

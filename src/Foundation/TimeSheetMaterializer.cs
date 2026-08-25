@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-internal class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<TimeSheet>
+public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<TimeSheet>
 {
     private readonly SqliteDataReader _reader = reader;
 
