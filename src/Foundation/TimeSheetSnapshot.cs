@@ -1,4 +1,5 @@
-public class TimeSheetSnapshot(TimeSheet sheet) : TimeSheet(sheet.Date, [.. sheet.Entries], sheet.Status)
+public class TimeSheetSnapshot(TrackedDate date, IList<TimeSheetEntry> entries, TimeSheetStatus status)
+    : TimeSheet(date, entries, status)
 {
     public required DateTimeOffset ModifiedOn { get; init; }
 }

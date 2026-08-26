@@ -30,7 +30,7 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
 
             if (dateCandidate != date)
             {
-                yield return new TimeSheetSnapshot(Create(date, entries, status))
+                yield return new TimeSheetSnapshot(date.ToTrackedDate(), entries, (TimeSheetStatus)status)
                 {
                     ModifiedOn = modifiedOn
                 };
@@ -48,14 +48,9 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
             }
         }
 
-        yield return new TimeSheetSnapshot(Create(date, entries, status))
+        yield return new TimeSheetSnapshot(date.ToTrackedDate(), entries, (TimeSheetStatus)status)
         {
             ModifiedOn = modifiedOn
         };
-    }
-
-    private static TimeSheet Create(DateTime date, IList<TimeSheetEntry> entries, int status)
-    {
-        return new(date.ToTrackedDate(), entries, (TimeSheetStatus)status);
     }
 }
