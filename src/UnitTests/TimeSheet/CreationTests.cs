@@ -5,8 +5,8 @@ public class CreationTests
     [Fact]
     public void Test()
     {
-        var sut = new TimeSheet(new (DateOnly.MinValue), [], TimeSheetStatus.Created);
-        var entry = new TimeSheetEntry(new (TimeOnly.MinValue, TimeOnly.MinValue), "");
+        var sut = new TimeSheet(new TrackedDate(DateOnly.MinValue), [], TimeSheetStatus.Created);
+        var entry = new TimeSheetEntry(new Period(TimeOnly.MinValue, TimeOnly.MinValue), new Comment(""));
 
         var sheet = sut.Create([entry]);
 

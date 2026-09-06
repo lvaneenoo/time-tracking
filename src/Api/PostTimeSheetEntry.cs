@@ -5,22 +5,44 @@ internal class PostTimeSheetEntry(ITimeSheets timeSheets, PostTimeSheetEntryRequ
 
     public async Task<IResult> ExecuteAsync(CancellationToken cancellationToken = default)
     {
+        var errors = new Dictionary<string, string[]>();
+
         if (!TrackedDate.TryParse(_request.Date, null, out var date))
         {
-            return Results.BadRequest();
+            errors.Add(nameof(_request.Date), []);
         }
 
-        if (_request.Period.ToValue() is not { } period)
+        if (!TimeOnly.TryParse(_request.Period.Start, out var start))
         {
-            return Results.BadRequest();
+            errors.Add(nameof(_request.Period.Start), []);
         }
 
-        if (await _timeSheets.FindAsync(date, cancellationToken) is not { } timeSheet)
+        if (!TimeOnly.TryParse(_request.Period.End, out var end))
+        {
+            errors.Add(nameof(_request.Period.End), []);
+        }
+
+        if (!Period.TryCreate(start, end, out var period))
+        {
+            errors.Add(nameof(_request.Period), []);
+        }
+
+        if (!Comment.TryParse(_request.Comment, null, out var comment))
+        {
+            errors.Add(nameof(_request.Comment), []);
+        }
+
+        if (errors.Count > 0)
+        {
+            return Results.ValidationProblem(errors);
+        }
+
+        if (await _timeSheets.FindAsync(date!, cancellationToken) is not { } sheet)
         {
             return Results.NotFound();
         }
 
-        var (_, entry) = timeSheet.AddEntry(period, _request.Comment);
+        var (_, entry) = sheet.AddEntry(period!, comment!);
 
         return entry is null ? Results.Conflict() : Results.Created();
     }

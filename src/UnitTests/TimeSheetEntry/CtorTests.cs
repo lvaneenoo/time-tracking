@@ -6,10 +6,11 @@ public class CtorTests
     public void Test()
     {
         var period = new Period(TimeOnly.MinValue, TimeOnly.MinValue);
+        var comment = new Comment("");
 
-        var entry = new TimeSheetEntry(period, "");
+        var entry = new TimeSheetEntry(period, comment);
 
         Assert.Equal(period, entry.Period);
-        Assert.Equal("", entry.Comment);
+        Assert.Equal(comment, entry.Comment);
     }
 }

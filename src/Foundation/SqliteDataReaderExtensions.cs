@@ -11,7 +11,7 @@ internal static class SqliteDataReaderExtensions
         return reader.ToPeriod() is { } period ? new(period, reader.GetComment()) : null;
     }
 
-    private static string GetComment(this SqliteDataReader reader) => reader.GetString(5);
+    private static Comment GetComment(this SqliteDataReader reader) => new(reader.GetString(5));
     private static DateTime GetPeriodEnd(this SqliteDataReader reader) => reader.GetDateTime(4);
     private static DateTime GetPeriodStart(this SqliteDataReader reader) => reader.GetDateTime(3);
 

@@ -1,8 +1,8 @@
 public static class TimeSheetQueries
 {
-    public static (TimeSheet, TimeSheetEntry?) AddEntry(this TimeSheet sheet, Period period, string comment)
+    public static (TimeSheet, TimeSheetEntry?) AddEntry(this TimeSheet sheet, Period period, Comment comment)
     {
-        if (sheet.Entries.Any(entry => entry.Period.Overlaps(period)))
+        if (sheet.Entries.Any(entry => period.Overlaps(entry.Period)))
         {
             return (sheet, null);
         }
