@@ -1,3 +1,5 @@
+using TestFloor;
+
 namespace TimeSheetTests;
 
 public class CtorTests
@@ -5,12 +7,10 @@ public class CtorTests
     [Fact]
     public void Test()
     {
-        var date = new TrackedDate(DateOnly.MinValue);
+        var sheet = new TimeSheet(Some.TrackedDate, [], Some.TimeSheetStatus);
 
-        var sheet = new TimeSheet(date, [], TimeSheetStatus.Created);
-
-        Assert.Equal(date, sheet.Date);
+        Assert.Equal(Some.TrackedDate, sheet.Date);
         Assert.Empty(sheet.Entries);
-        Assert.Equal(TimeSheetStatus.Created, sheet.Status);
+        Assert.Equal(Some.TimeSheetStatus, sheet.Status);
     }
 }

@@ -9,11 +9,20 @@ public static class TimeSheetQueries
 
         var candidate = new TimeSheetEntry(period, comment);
 
-        return (sheet.Create([.. sheet.Entries, candidate]), candidate);
+        var entries = new List<TimeSheetEntry>(sheet.Entries)
+        {
+            candidate
+        };
+
+        entries.Sort(ByPeriod);
+
+        return (sheet.Create(entries), candidate);
     }
 
     internal static TimeSheet Create(this TimeSheet sheet, IList<TimeSheetEntry> entries)
     {
         return new TimeSheet(sheet.Date, entries, sheet.Status);
     }
+
+    private static int ByPeriod(TimeSheetEntry x, TimeSheetEntry y) => x.Period.CompareTo(y.Period);
 }

@@ -3,11 +3,11 @@ public class TimeSheet
     internal TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries, TimeSheetStatus status)
     {
         Date = date;
-        Entries = [.. entries];
+        Entries = new TimeSheetEntryCollection(entries);
         Status = status;
     }
 
     public TrackedDate Date { get; }
-    public IReadOnlyList<TimeSheetEntry> Entries { get; }
+    public TimeSheetEntryCollection Entries { get; }
     public TimeSheetStatus Status { get; }
 }

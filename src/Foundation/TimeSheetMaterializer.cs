@@ -26,16 +26,16 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
 
         while (await _reader.ReadAsync(cancellationToken))
         {
-            var dateCandidate = _reader.GetDate();
+            var d = _reader.GetDate();
 
-            if (dateCandidate != date)
+            if (d != date)
             {
-                yield return new TimeSheetSnapshot(date.ToTrackedDate(), entries, (TimeSheetStatus)status)
+                yield return new TimeSheetSnapshot(date, entries, status)
                 {
                     ModifiedOn = modifiedOn
                 };
 
-                date = dateCandidate;
+                date = d;
                 status = _reader.GetStatus();
                 entries = [];
 
@@ -48,7 +48,7 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
             }
         }
 
-        yield return new TimeSheetSnapshot(date.ToTrackedDate(), entries, (TimeSheetStatus)status)
+        yield return new TimeSheetSnapshot(date, entries, status)
         {
             ModifiedOn = modifiedOn
         };

@@ -1,3 +1,5 @@
+using TestFloor;
+
 namespace TimeSheetTests;
 
 public class AddEntryTests
@@ -5,20 +7,17 @@ public class AddEntryTests
     [Fact]
     public void Test()
     {
-        var sut = new TimeSheet(new TrackedDate(DateOnly.MinValue), [], TimeSheetStatus.Created);
+        var sut = new TimeSheet(Some.TrackedDate, [], Some.TimeSheetStatus);
 
-        var period = new Period(TimeOnly.MinValue, TimeOnly.MinValue);
-        var comment = new Comment("");
-
-        var (sheet, entry) = sut.AddEntry(period, comment);
+        var (sheet, entry) = sut.AddEntry(Some.Period, Some.Comment);
 
         Assert.NotSame(sut, sheet);
         Assert.Equal(sut.Date, sheet.Date);
         Assert.Equal(sut.Status, sheet.Status);
 
         Assert.NotNull(entry);
-        Assert.Same(period, entry.Period);
-        Assert.Same(comment, entry.Comment);
+        Assert.Same(Some.Period, entry.Period);
+        Assert.Same(Some.Comment, entry.Comment);
 
         Assert.Single(sheet.Entries);
         Assert.Same(entry, sheet.Entries[0]);

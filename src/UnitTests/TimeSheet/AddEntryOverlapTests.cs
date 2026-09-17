@@ -1,3 +1,5 @@
+using TestFloor;
+
 namespace TimeSheetTests;
 
 public class AddEntryOverlapTests
@@ -5,12 +7,9 @@ public class AddEntryOverlapTests
     [Fact]
     public void Test()
     {
-        var sut = new TimeSheet(
-            new TrackedDate(DateOnly.MinValue),
-            [new TimeSheetEntry(new Period(TimeOnly.MinValue, TimeOnly.MinValue), new Comment(""))],
-            TimeSheetStatus.Created);
+        var sut = new TimeSheet(Some.TrackedDate, [Some.TimeSheetEntry], Some.TimeSheetStatus);
 
-        var (sheet, entry) = sut.AddEntry(sut.Entries[0].Period, sut.Entries[0].Comment);
+        var (sheet, entry) = sut.AddEntry(Some.TimeSheetEntry.Period, Some.TimeSheetEntry.Comment);
 
         Assert.Same(sut, sheet);
         Assert.Null(entry);

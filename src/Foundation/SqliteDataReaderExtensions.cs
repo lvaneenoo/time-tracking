@@ -2,9 +2,13 @@ using Microsoft.Data.Sqlite;
 
 internal static class SqliteDataReaderExtensions
 {
-    public static DateTime GetDate(this SqliteDataReader reader) => reader.GetDateTime(0);
+    public static TrackedDate GetDate(this SqliteDataReader reader)
+    {
+        return new TrackedDate(DateOnly.FromDateTime(reader.GetDateTime(0)));
+    }
+
     public static DateTimeOffset GetModifiedOn(this SqliteDataReader reader) => reader.GetDateTimeOffset(2);
-    public static int GetStatus(this SqliteDataReader reader) => reader.GetInt32(1);
+    public static TimeSheetStatus GetStatus(this SqliteDataReader reader) => (TimeSheetStatus)reader.GetInt32(1);
 
     public static TimeSheetEntry? ToTimeSheetEntry(this SqliteDataReader reader)
     {
