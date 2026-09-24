@@ -7,10 +7,14 @@ public class CtorTests
     [Fact]
     public void Test()
     {
-        var sheet = new TimeSheet(Some.TrackedDate, [], Some.TimeSheetStatus);
+        var date = Some.TrackedDate;
+        var entries = new List<TimeSheetEntry>();
+        var status = Some.TimeSheetStatus;
 
-        Assert.Equal(Some.TrackedDate, sheet.Date);
-        Assert.Empty(sheet.Entries);
-        Assert.Equal(Some.TimeSheetStatus, sheet.Status);
+        var sheet = new TimeSheet(date, entries, status);
+
+        Assert.Equal(date, sheet.Date);
+        Assert.Equal(entries.Count, sheet.Entries.Count);
+        Assert.Equal(status, sheet.Status);
     }
 }

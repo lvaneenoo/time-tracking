@@ -1,3 +1,5 @@
+using TestFloor;
+
 namespace TimeSheetEntryTests;
 
 public class CtorTests
@@ -5,8 +7,8 @@ public class CtorTests
     [Fact]
     public void Test()
     {
-        var period = new Period(TimeOnly.MinValue, TimeOnly.MinValue);
-        var comment = new Comment("");
+        var period = Some.Period;
+        var comment = Some.Comment;
 
         var entry = new TimeSheetEntry(period, comment);
 
