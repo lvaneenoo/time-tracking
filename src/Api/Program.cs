@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -11,38 +9,10 @@ builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 
 var app = builder.Build();
 
-app.MapPost("/time-sheet-entries", async (
-    CancellationToken cancellationToken,
-    ITimeSheets timeSheets,
-    PostTimeSheetEntryRequest request) =>
-{
-    var command = new PostTimeSheetEntry(timeSheets, request);
+app.MapPost("/time-sheet-entries/", TimeSheetEntriesEndpoints.PostAsync);
+app.MapDelete("/time-sheet-entries/", TimeSheetEntriesEndpoints.DeleteAsync);
 
-    return await command.ExecuteAsync();
-});
-
-app.MapDelete("/time-sheet-entries", async (
-    IConfiguration configuration,
-    [FromQuery(Name = "date")] TrackedDate date,
-    [FromQuery(Name = "period-start")] TimeOnly periodStart,
-    [FromQuery(Name = "period-end")] TimeOnly periodEnd,
-    CancellationToken cancellationToken) =>
-{
-    var command = new DeleteTimeSheetEntry(configuration, date, periodStart, periodEnd);
-
-    return await command.ExecuteAsync(cancellationToken);
-});
-
-app.MapGet("/time-sheets/{date}", async (
-    ITimeSheets timeSheets,
-    TrackedDate date,
-    HttpContext httpContext,
-    CancellationToken cancellationToken) =>
-{
-    var query = new GetTimeSheet(timeSheets, date, httpContext);
-
-    return await query.ExecuteAsync(cancellationToken);
-});
+app.MapGet("/time-sheets/{date}", TimeSheetsEndpoints.GetAsync);
 
 app.Run();
 
