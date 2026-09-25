@@ -6,32 +6,37 @@ public class GetTimeSheetTests(TimeTrackingFactory factory) : IClassFixture<Time
     private readonly TimeTrackingFactory _factory = factory;
 
     [Fact]
-    public async Task ReturnsNotModifiedAsync()
+    public async Task Returns_NotFound()
     {
-        var date = new TrackedDate(new DateOnly(2025, 1, 1));
-        var sheet = date.CreateTimeSheet();
+        var response = await GetAsync(January2025.Second);
 
-        var response = await GetTimeSheetAsync(sheet, sheet.CreateResourceId());
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Returns_NotModified()
+    {
+        var sheet = January2025.First.CreateTimeSheet();
+
+        var response = await GetAsync(January2025.First, sheet.CreateResourceId());
 
         Assert.Equal(HttpStatusCode.NotModified, response.StatusCode);
     }
 
     [Fact]
-    public async Task ReturnsResourceAsync()
+    public async Task Returns_OK()
     {
-        var date = new TrackedDate(new DateOnly(2025, 1, 1));
-
-        var response = await GetTimeSheetAsync(date.CreateTimeSheet());
+        var response = await GetAsync(January2025.First);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    private async Task<HttpResponseMessage> GetTimeSheetAsync(TimeSheet sheet, string? resourceId = null)
+    private async Task<HttpResponseMessage> GetAsync(TrackedDate date, string? resourceId = null)
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = sheet.Resolve()
+            RequestUri = new Uri($"/time-sheets/{date:yyyy-MM-dd}")
         };
 
         if (resourceId is not null)

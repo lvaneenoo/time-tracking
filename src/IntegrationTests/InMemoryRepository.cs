@@ -2,6 +2,11 @@ internal class InMemoryRepository : ITimeSheets
 {
     public async Task<TimeSheet?> FindAsync(TrackedDate date, CancellationToken cancellationToken = default)
     {
-        return await Task.FromResult(date.CreateTimeSheet());
+        if (date == January2025.First)
+        {
+            return await Task.FromResult(date.CreateTimeSheet());
+        }
+
+        return null;
     }
 }
