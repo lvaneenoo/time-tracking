@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.Sqlite;
 
 internal class TimeSheetEntriesEndpoints
 {
@@ -7,6 +6,7 @@ internal class TimeSheetEntriesEndpoints
         [FromQuery(Name = "date")] TrackedDate date,
         [FromQuery(Name = "period-start")] TimeOnly periodStart,
         [FromQuery(Name = "period-end")] TimeOnly periodEnd,
+        IDeleteCommandFactory factory,
         CancellationToken cancellationToken)
     {
         if (!Period.TryCreate(periodStart, periodEnd, out var period))
@@ -14,17 +14,9 @@ internal class TimeSheetEntriesEndpoints
             return Results.BadRequest();
         }
 
-        using var connection = new SqliteConnection(ConnectionStrings.WriteStore);
-        using var command = connection.CreateCommand();
+        var command = factory.Create(date, period);
 
-        command.CommandText = DeleteTimeSheetEntries.ByDateAndPeriod;
-
-        command.Parameters.AddRange(date.Resolve());
-        command.Parameters.AddRange(period.Resolve());
-
-        await connection.OpenAsync(cancellationToken);
-
-        return await command.ExecuteNonQueryAsync(cancellationToken) switch
+        return await command.ExecuteAsync(cancellationToken) switch
         {
             0 => Results.NotFound(),
             1 => Results.NoContent(),
