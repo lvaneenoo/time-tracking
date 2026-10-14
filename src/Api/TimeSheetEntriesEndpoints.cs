@@ -3,18 +3,33 @@ using Microsoft.AspNetCore.Mvc;
 internal class TimeSheetEntriesEndpoints
 {
     public static async Task<IResult> DeleteAsync(
-        [FromQuery(Name = "date")] TrackedDate date,
-        [FromQuery(Name = "period-start")] TimeOnly periodStart,
-        [FromQuery(Name = "period-end")] TimeOnly periodEnd,
+        [FromQuery(Name = "date")] string date,
+        [FromQuery(Name = "period-start")] string periodStart,
+        [FromQuery(Name = "period-end")] string periodEnd,
         IDeleteCommandFactory factory,
         CancellationToken cancellationToken)
     {
-        if (!Period.TryCreate(periodStart, periodEnd, out var period))
+        if (!TrackedDate.TryParse(date, null, out var d))
         {
             return Results.BadRequest();
         }
 
-        var command = factory.Create(date, period);
+        if (!TimeOnly.TryParseExact(periodStart, "HH:mm", out var start))
+        {
+            return Results.BadRequest();
+        }
+
+        if (!TimeOnly.TryParseExact(periodEnd, "HH:mm", out var end))
+        {
+            return Results.BadRequest();
+        }
+
+        if (!Period.TryCreate(start, end, out var period))
+        {
+            return Results.BadRequest();
+        }
+
+        var command = factory.Create(d, period);
 
         return await command.ExecuteAsync(cancellationToken) switch
         {

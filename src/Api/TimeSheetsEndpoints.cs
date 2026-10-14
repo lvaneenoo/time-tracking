@@ -3,14 +3,16 @@ using Microsoft.Net.Http.Headers;
 
 internal static class TimeSheetsEndpoints
 {
-    public static async Task<IResult> GetAsync(
-        TrackedDate date,
-        HttpContext context,
-        CancellationToken cancellationToken)
+    public static async Task<IResult> GetAsync(string date, HttpContext context, CancellationToken cancellationToken)
     {
+        if (!TrackedDate.TryParse(date, null, out var d))
+        {
+            return Results.BadRequest();
+        }
+
         var sheets = context.RequestServices.GetRequiredService<ITimeSheets>();
 
-        if (await sheets.FindAsync(date, cancellationToken) is not { } sheet)
+        if (await sheets.FindAsync(d, cancellationToken) is not { } sheet)
         {
             return Results.NotFound();
         }

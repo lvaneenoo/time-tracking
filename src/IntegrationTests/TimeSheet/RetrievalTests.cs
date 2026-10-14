@@ -1,14 +1,22 @@
 using System.Net;
 using Microsoft.Net.Http.Headers;
 
-public class GetTimeSheetTests(TimeTrackingFactory factory) : IClassFixture<TimeTrackingFactory>
+public class RetrievalTests(TimeTrackingFactory factory) : IClassFixture<TimeTrackingFactory>
 {
     private readonly TimeTrackingFactory _factory = factory;
 
     [Fact]
+    public async Task Returns_BadRequest()
+    {
+        var response = await GetAsync("A");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task Returns_NotFound()
     {
-        var response = await GetAsync(January2025.Second);
+        var response = await GetAsync("2025-01-02");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -16,9 +24,9 @@ public class GetTimeSheetTests(TimeTrackingFactory factory) : IClassFixture<Time
     [Fact]
     public async Task Returns_NotModified()
     {
-        var sheet = January2025.First.CreateTimeSheet();
+        var sheet = January2025.First.NoEntries();
 
-        var response = await GetAsync(January2025.First, sheet.CreateResourceId());
+        var response = await GetAsync("2025-01-01", sheet.CreateResourceId());
 
         Assert.Equal(HttpStatusCode.NotModified, response.StatusCode);
     }
@@ -26,17 +34,17 @@ public class GetTimeSheetTests(TimeTrackingFactory factory) : IClassFixture<Time
     [Fact]
     public async Task Returns_OK()
     {
-        var response = await GetAsync(January2025.First);
+        var response = await GetAsync("2025-01-01");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    private async Task<HttpResponseMessage> GetAsync(TrackedDate date, string? resourceId = null)
+    private async Task<HttpResponseMessage> GetAsync(string date, string? resourceId = null)
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri($"/time-sheets/{date:yyyy-MM-dd}")
+            RequestUri = new Uri($"/time-sheets/{date}")
         };
 
         if (resourceId is not null)

@@ -2,17 +2,12 @@ using TestFloor;
 
 internal static class TrackedDateQueries
 {
-    public static TimeSheetSnapshot CreateTimeSheet(this TrackedDate date)
-    {
-        return new TimeSheetSnapshot(date, [], Some.TimeSheetStatus)
-        {
-            ModifiedOn = new DateTimeOffset(new DateTime(date, TimeOnly.MinValue))
-        };
-    }
+    public static TimeSheetSnapshot NineToFive(this TrackedDate date) => Create(date, Entries.NineToFive);
+    public static TimeSheetSnapshot NoEntries(this TrackedDate date) => Create(date, []);
 
-    public static TimeSheetSnapshot NineToFive(this TrackedDate date)
+    private static TimeSheetSnapshot Create(TrackedDate date, IList<TimeSheetEntry> entries)
     {
-        return new TimeSheetSnapshot(date, Entries.NineToFive, Some.TimeSheetStatus)
+        return new TimeSheetSnapshot(date, entries, TimeSheetStatus.Created)
         {
             ModifiedOn = new DateTimeOffset(new DateTime(date, TimeOnly.MinValue))
         };
