@@ -6,6 +6,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 builder.Services.AddSingleton<IDeleteCommandFactory, DeleteCommandFactory>();
+builder.Services.AddSingleton<IInsertCommandFactory, InsertCommandFactory>();
+
 builder.Services.AddSingleton<ITimeSheets, TimeSheets>();
 
 var app = builder.Build();

@@ -85,6 +85,14 @@ internal class TimeSheetEntriesEndpoints
 
         var (_, entry) = sheet.AddEntry(period!, comment!);
 
-        return entry is null ? Results.Conflict() : Results.Created();
+        if (entry is null)
+        {
+            return Results.Conflict();
+        }
+
+        var factory = context.RequestServices.GetRequiredService<IInsertCommandFactory>();
+        var command = factory.Create(date!, period!, comment!);
+
+        return await command.ExecuteAsync(cancellationToken) == 1 ? Results.Created() : Results.InternalServerError();
     }
 }
