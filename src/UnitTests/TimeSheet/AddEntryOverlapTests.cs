@@ -7,9 +7,9 @@ public class AddEntryOverlapTests
     [Fact]
     public void Test()
     {
-        var sut = new TimeSheet(Some.TrackedDate, [Some.TimeSheetEntry], Some.TimeSheetStatus);
+        var sut = new TimeSheet(Specimen.TrackedDate, [Specimen.TimeSheetEntry], Specimen.TimeSheetStatus);
 
-        var (sheet, entry) = sut.AddEntry(Some.TimeSheetEntry.Period, Some.TimeSheetEntry.Comment);
+        var (sheet, entry) = sut.AddEntry(Specimen.TimeSheetEntry.Period, Specimen.TimeSheetEntry.Comment);
 
         Assert.Same(sut, sheet);
         Assert.Null(entry);

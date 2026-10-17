@@ -1,6 +1,6 @@
 namespace TestFloor;
 
-internal static class Some
+internal static class Specimen
 {
     public static readonly Comment Comment = new("");
     public static readonly Period Period = new(TimeOnly.MinValue, TimeOnly.MinValue);

@@ -7,8 +7,8 @@ public class CtorTests
     [Fact]
     public void Test()
     {
-        var period = Some.Period;
-        var comment = Some.Comment;
+        var period = Specimen.Period;
+        var comment = Specimen.Comment;
 
         var entry = new TimeSheetEntry(period, comment);
 

@@ -7,9 +7,9 @@ public class CtorTests
     [Fact]
     public void Test()
     {
-        var date = Some.TrackedDate;
+        var date = Specimen.TrackedDate;
         var entries = new List<TimeSheetEntry>();
-        var status = Some.TimeSheetStatus;
+        var status = Specimen.TimeSheetStatus;
 
         var sheet = new TimeSheet(date, entries, status);
 
