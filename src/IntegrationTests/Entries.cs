@@ -7,6 +7,6 @@ internal static class Entries
 
     public static readonly List<TimeSheetEntry> NineToFive =
     [
-        new TimeSheetEntry(new Period(Nine, Five), Specimen.Comment)
+        new TimeSheetEntry(new Period(Nine, Five), Comment.Empty)
     ];
 }

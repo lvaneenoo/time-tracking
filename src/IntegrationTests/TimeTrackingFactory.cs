@@ -51,7 +51,7 @@ public class TimeTrackingFactory : WebApplicationFactory<Program>
 
         public Task<int> ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (_date == January2025.First && _period == FiveToSix && _comment == new Comment(""))
+            if (_date == January2025.First && _period == FiveToSix && _comment == Comment.Empty)
             {
                 return Task.FromResult(1);
             }

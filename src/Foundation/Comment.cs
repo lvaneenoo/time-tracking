@@ -2,6 +2,8 @@ using System.Diagnostics.CodeAnalysis;
 
 public sealed class Comment : IComparable<Comment>, IEquatable<Comment>, IParsable<Comment>
 {
+    public static readonly Comment Empty = new("");
+
     private const int MaxLength = 150;
 
     private readonly string _value;
