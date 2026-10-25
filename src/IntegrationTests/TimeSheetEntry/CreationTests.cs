@@ -5,11 +5,11 @@ using System.Text.Json;
 
 namespace IntegrationTests;
 
-public class CreationTests(TimeTrackingFactory factory) : IClassFixture<TimeTrackingFactory>
+public class CreationTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
     private static readonly MediaTypeHeaderValue ApplicationJson = new(MediaTypeNames.Application.Json);
 
-    private readonly TimeTrackingFactory _factory = factory;
+    private readonly TimeTracking _timeTracking = timeTracking;
 
     [Fact]
     public async Task Returns_BadRequest()
@@ -65,7 +65,7 @@ public class CreationTests(TimeTrackingFactory factory) : IClassFixture<TimeTrac
             }
         };
 
-        using var client = _factory.CreateClient();
+        using var client = _timeTracking.CreateClient();
 
         return await client.PostAsync(new Uri("/time-sheet-entries/"), CreateContent(request));
     }

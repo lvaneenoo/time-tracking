@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 
 using TestFloor;
 
-public class TimeTrackingFactory : WebApplicationFactory<Program>
+public class TimeTracking : WebApplicationFactory<Program>
 {
     internal class DeleteCommandFactory : IDeleteCommandFactory
     {

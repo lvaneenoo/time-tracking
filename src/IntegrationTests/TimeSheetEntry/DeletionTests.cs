@@ -3,7 +3,7 @@ using System.Web;
 
 namespace IntegrationTests;
 
-public class DeletionTests(TimeTrackingFactory factory) : IClassFixture<TimeTrackingFactory>
+public class DeletionTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
     internal static class ParameterNames
     {
@@ -12,7 +12,7 @@ public class DeletionTests(TimeTrackingFactory factory) : IClassFixture<TimeTrac
         public static readonly string PeriodStart = "period-start";
     }
 
-    private readonly TimeTrackingFactory _factory = factory;
+    private readonly TimeTracking _timeTracking = timeTracking;
 
     [Fact]
     public async Task Returns_BadRequest()
@@ -49,7 +49,7 @@ public class DeletionTests(TimeTrackingFactory factory) : IClassFixture<TimeTrac
 
         builder.Query = query.ToString();
 
-        using var client = _factory.CreateClient();
+        using var client = _timeTracking.CreateClient();
 
         return await client.DeleteAsync(builder.Uri);
     }

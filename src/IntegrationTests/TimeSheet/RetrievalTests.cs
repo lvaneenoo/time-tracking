@@ -1,9 +1,9 @@
 using System.Net;
 using Microsoft.Net.Http.Headers;
 
-public class RetrievalTests(TimeTrackingFactory factory) : IClassFixture<TimeTrackingFactory>
+public class RetrievalTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
-    private readonly TimeTrackingFactory _factory = factory;
+    private readonly TimeTracking _timeTracking = timeTracking;
 
     [Fact]
     public async Task Returns_BadRequest()
@@ -52,7 +52,7 @@ public class RetrievalTests(TimeTrackingFactory factory) : IClassFixture<TimeTra
             request.Headers.Add(HeaderNames.IfNoneMatch, $"\"{resourceId}\"");
         }
 
-        using var client = _factory.CreateClient();
+        using var client = _timeTracking.CreateClient();
 
         return await client.SendAsync(request);
     }
