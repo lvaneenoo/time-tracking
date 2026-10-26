@@ -1,5 +1,6 @@
 using System.Net;
-using Microsoft.Net.Http.Headers;
+
+namespace IntegrationTests;
 
 public class RetrievalTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
@@ -41,19 +42,9 @@ public class RetrievalTests(TimeTracking timeTracking) : IClassFixture<TimeTrack
 
     private async Task<HttpResponseMessage> GetAsync(string date, string? resourceId = null)
     {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"/time-sheets/{date}")
-        };
-
-        if (resourceId is not null)
-        {
-            request.Headers.Add(HeaderNames.IfNoneMatch, $"\"{resourceId}\"");
-        }
-
         using var client = _timeTracking.CreateClient();
+        var sender = new GetTimeSheetSender(client);
 
-        return await client.SendAsync(request);
+        return await sender.SendAsync(date, resourceId);
     }
 }

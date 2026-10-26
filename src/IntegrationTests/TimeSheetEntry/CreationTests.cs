@@ -1,14 +1,9 @@
 using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Mime;
-using System.Text.Json;
 
 namespace IntegrationTests;
 
 public class CreationTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
-    private static readonly MediaTypeHeaderValue ApplicationJson = new(MediaTypeNames.Application.Json);
-
     private readonly TimeTracking _timeTracking = timeTracking;
 
     [Fact]
@@ -43,30 +38,15 @@ public class CreationTests(TimeTracking timeTracking) : IClassFixture<TimeTracki
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    private static StringContent CreateContent(PostTimeSheetEntryRequest request)
-    {
-        return new StringContent(JsonSerializer.Serialize(request), ApplicationJson);
-    }
-
     private async Task<HttpResponseMessage> PostAsync(
         string date,
         string periodStart,
         string periodEnd,
         string comment)
     {
-        var request = new PostTimeSheetEntryRequest
-        {
-            Comment = comment,
-            Date = date,
-            Period = new PeriodResource
-            {
-                End = periodEnd,
-                Start = periodStart
-            }
-        };
-
         using var client = _timeTracking.CreateClient();
+        var sender = new PostTimeSheetEntrySender(client);
 
-        return await client.PostAsync(new Uri("/time-sheet-entries/"), CreateContent(request));
+        return await sender.SendAsync(date, periodStart, periodEnd, comment);
     }
 }

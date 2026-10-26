@@ -1,17 +1,9 @@
 using System.Net;
-using System.Web;
 
 namespace IntegrationTests;
 
 public class DeletionTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
-    internal static class ParameterNames
-    {
-        public static readonly string Date = "date";
-        public static readonly string PeriodEnd = "period-end";
-        public static readonly string PeriodStart = "period-start";
-    }
-
     private readonly TimeTracking _timeTracking = timeTracking;
 
     [Fact]
@@ -40,17 +32,9 @@ public class DeletionTests(TimeTracking timeTracking) : IClassFixture<TimeTracki
 
     private async Task<HttpResponseMessage> DeleteAsync(string date, string periodStart, string periodEnd)
     {
-        var builder = new UriBuilder("http://localhost/time-sheet-entries/");
-        var query = HttpUtility.ParseQueryString("");
-
-        query[ParameterNames.Date] = date;
-        query[ParameterNames.PeriodStart] = periodStart;
-        query[ParameterNames.PeriodEnd] = periodEnd;
-
-        builder.Query = query.ToString();
-
         using var client = _timeTracking.CreateClient();
+        var sender = new DeleteTimeSheetEntrySender(client);
 
-        return await client.DeleteAsync(builder.Uri);
+        return await sender.SendAsync(date, periodStart, periodEnd);
     }
 }
