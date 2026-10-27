@@ -1,8 +1,8 @@
 using System.Net;
 
-namespace IntegrationTests;
+namespace TimeSheetTests.Retrieval;
 
-public class RetrievalTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
+public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
     private readonly TimeTracking _timeTracking = timeTracking;
 
@@ -43,7 +43,7 @@ public class RetrievalTests(TimeTracking timeTracking) : IClassFixture<TimeTrack
     private async Task<HttpResponseMessage> GetAsync(string date, string? resourceId = null)
     {
         using var client = _timeTracking.CreateClient();
-        var sender = new GetTimeSheetSender(client);
+        var sender = new Sender(client);
 
         return await sender.SendAsync(date, resourceId);
     }

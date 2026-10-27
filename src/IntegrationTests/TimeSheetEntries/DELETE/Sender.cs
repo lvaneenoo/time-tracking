@@ -1,8 +1,8 @@
 using System.Web;
 
-namespace IntegrationTests;
+namespace TimeSheetEntryTests.Deletion;
 
-internal class DeleteTimeSheetEntrySender(HttpClient client)
+internal class Sender(HttpClient client)
 {
     private readonly HttpClient _httpClient = client;
 

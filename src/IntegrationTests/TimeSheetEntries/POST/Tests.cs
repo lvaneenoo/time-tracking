@@ -1,8 +1,8 @@
 using System.Net;
 
-namespace IntegrationTests;
+namespace TimeSheetEntryTests.Creation;
 
-public class CreationTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
+public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
     private readonly TimeTracking _timeTracking = timeTracking;
 
@@ -45,7 +45,7 @@ public class CreationTests(TimeTracking timeTracking) : IClassFixture<TimeTracki
         string comment)
     {
         using var client = _timeTracking.CreateClient();
-        var sender = new PostTimeSheetEntrySender(client);
+        var sender = new Sender(client);
 
         return await sender.SendAsync(date, periodStart, periodEnd, comment);
     }

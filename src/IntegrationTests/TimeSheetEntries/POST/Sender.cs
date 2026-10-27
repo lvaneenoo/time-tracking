@@ -2,9 +2,9 @@ using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text.Json;
 
-namespace IntegrationTests;
+namespace TimeSheetEntryTests.Creation;
 
-internal class PostTimeSheetEntrySender(HttpClient client)
+internal class Sender(HttpClient client)
 {
     private static readonly MediaTypeHeaderValue ApplicationJson = new(MediaTypeNames.Application.Json);
 

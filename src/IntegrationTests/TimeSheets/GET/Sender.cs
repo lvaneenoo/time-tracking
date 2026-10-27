@@ -1,8 +1,8 @@
 using Microsoft.Net.Http.Headers;
 
-namespace IntegrationTests;
+namespace TimeSheetTests.Retrieval;
 
-internal class GetTimeSheetSender(HttpClient client)
+internal class Sender(HttpClient client)
 {
     private readonly HttpClient _httpClient = client;
 

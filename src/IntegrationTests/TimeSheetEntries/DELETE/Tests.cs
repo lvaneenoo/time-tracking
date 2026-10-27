@@ -1,8 +1,8 @@
 using System.Net;
 
-namespace IntegrationTests;
+namespace TimeSheetEntryTests.Deletion;
 
-public class DeletionTests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
+public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {
     private readonly TimeTracking _timeTracking = timeTracking;
 
@@ -33,7 +33,7 @@ public class DeletionTests(TimeTracking timeTracking) : IClassFixture<TimeTracki
     private async Task<HttpResponseMessage> DeleteAsync(string date, string periodStart, string periodEnd)
     {
         using var client = _timeTracking.CreateClient();
-        var sender = new DeleteTimeSheetEntrySender(client);
+        var sender = new Sender(client);
 
         return await sender.SendAsync(date, periodStart, periodEnd);
     }
