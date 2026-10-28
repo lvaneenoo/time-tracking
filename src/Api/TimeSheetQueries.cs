@@ -11,7 +11,7 @@ internal static class TimeSheetQueries
     {
         return new TimeSheetResource
         {
-            Date = sheet.Date.ToString("yyyy-MM-dd", null),
+            Date = sheet.Date.ToCanonicalString(),
             Entries = [.. sheet.Entries.Select(entry => entry.ToResource())],
             Status = (int)sheet.Status
         };

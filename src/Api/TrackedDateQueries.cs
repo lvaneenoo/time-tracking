@@ -14,8 +14,10 @@ internal static class TrackedDateQueries
         [
             new SqliteParameter($"@{TimeSheetTable.Date}", SqliteType.Text)
             {
-                Value = date.ToString("yyyy-MM-dd", null)
+                Value = date.ToCanonicalString()
             }
         ];
     }
+
+    public static string ToCanonicalString(this TrackedDate date) => date.ToString("yyyy-MM-dd", null);
 }
