@@ -1,4 +1,5 @@
 using System.Net;
+using TestFloor;
 
 namespace TimeSheetEntryTests.Creation;
 
@@ -17,7 +18,7 @@ public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
     [Fact]
     public async Task Returns_Conflict()
     {
-        var response = await PostAsync("2025-01-01", "09:00", "16:59", "");
+        var response = await PostAsync("2025-01-02", "09:00", "16:59", "");
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
@@ -33,7 +34,7 @@ public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
     [Fact]
     public async Task Returns_NotFound()
     {
-        var response = await PostAsync("2025-01-02", "09:00", "16:59", "");
+        var response = await PostAsync("2025-01-03", "09:00", "16:59", "");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }

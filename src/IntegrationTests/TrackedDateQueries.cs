@@ -1,4 +1,4 @@
-using TestFloor;
+namespace TestFloor;
 
 internal static class TrackedDateQueries
 {
@@ -11,5 +11,13 @@ internal static class TrackedDateQueries
         {
             ModifiedOn = new DateTimeOffset(new DateTime(date, TimeOnly.MinValue))
         };
+    }
+
+    internal static class Entries
+    {
+        public static readonly List<TimeSheetEntry> NineToFive =
+        [
+            new TimeSheetEntry(new Period(new TimeOnly(9, 0), new TimeOnly(16, 59)), Comment.Empty)
+        ];
     }
 }

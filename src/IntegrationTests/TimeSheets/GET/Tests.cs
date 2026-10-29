@@ -1,4 +1,5 @@
 using System.Net;
+using TestFloor;
 
 namespace TimeSheetTests.Retrieval;
 
@@ -17,7 +18,7 @@ public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
     [Fact]
     public async Task Returns_NotFound()
     {
-        var response = await GetAsync("2025-01-02");
+        var response = await GetAsync("2025-01-03");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -25,9 +26,7 @@ public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
     [Fact]
     public async Task Returns_NotModified()
     {
-        var sheet = January2025.First.NoEntries();
-
-        var response = await GetAsync("2025-01-01", sheet.CreateResourceId());
+        var response = await GetAsync("2025-01-01", January2025.First.CreateResourceId());
 
         Assert.Equal(HttpStatusCode.NotModified, response.StatusCode);
     }

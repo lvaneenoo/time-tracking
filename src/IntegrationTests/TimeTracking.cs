@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using Microsoft.Extensions.Hosting;
 
-namespace TimeSheetTests.Retrieval;
+namespace TestFloor;
 
 public class TimeTracking : WebApplicationFactory<Program>
 {
@@ -20,7 +20,7 @@ public class TimeTracking : WebApplicationFactory<Program>
             services.AddSingleton<IInsertCommandFactory>(new InsertCommandFactory());
 
             services.RemoveAll<ITimeSheets>();
-            services.AddSingleton<ITimeSheets>(new InMemoryTimeSheets([January2025.First.NoEntries()]));
+            services.AddSingleton<ITimeSheets>(new January2025());
         });
 
         return base.CreateHost(builder);
@@ -30,7 +30,7 @@ public class TimeTracking : WebApplicationFactory<Program>
     {
         public IStorageCommand Create(TrackedDate date, Period period)
         {
-            throw new InvalidOperationException();
+            return new DeleteTimeSheetEntry(date, period);
         }
     }
 
@@ -38,7 +38,7 @@ public class TimeTracking : WebApplicationFactory<Program>
     {
         public IStorageCommand Create(TrackedDate date, Period period, Comment comment)
         {
-            throw new InvalidOperationException();
+            return new InsertTimeSheetEntry(date, period, comment);
         }
     }
 }
