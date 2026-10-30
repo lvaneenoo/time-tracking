@@ -1,4 +1,4 @@
-internal class RetrieveTimeSheets
+internal class SelectTimeSheets
 {
     public static string ByDate { get; } = @"
            SELECT time_sheets.time_sheet_date,

@@ -2,26 +2,12 @@ using Microsoft.Data.Sqlite;
 
 internal class TimeSheets : ITimeSheets
 {
-    private readonly string _connectionString;
-
-    public TimeSheets(IConfiguration configuration)
-    {
-        string? connectionString = configuration.GetConnectionString("WriteStore");
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            throw new InvalidOperationException();
-        }
-
-        _connectionString = connectionString;
-    }
-
     public async Task<TimeSheet?> FindAsync(TrackedDate date, CancellationToken cancellationToken = default)
     {
-        using var connection = new SqliteConnection(_connectionString);
+        using var connection = new SqliteConnection(ConnectionStrings.WriteStore);
         using var command = connection.CreateCommand();
 
-        command.CommandText = RetrieveTimeSheets.ByDate;
+        command.CommandText = SelectTimeSheets.ByDate;
 
         command.Parameters.AddRange(date.Resolve());
 
