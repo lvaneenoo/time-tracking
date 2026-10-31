@@ -1,6 +1,6 @@
 public class TimeSheet
 {
-    internal TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries, TimeSheetStatus status)
+    internal TimeSheet(TrackedDate date, IList<TimeSheetEntry> entries, TimesheetStatus status)
     {
         Date = date;
         Entries = new TimeSheetEntryCollection(entries);
@@ -9,5 +9,5 @@ public class TimeSheet
 
     public TrackedDate Date { get; }
     public TimeSheetEntryCollection Entries { get; }
-    public TimeSheetStatus Status { get; }
+    public TimesheetStatus Status { get; }
 }

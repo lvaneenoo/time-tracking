@@ -7,7 +7,7 @@ internal static class TrackedDateQueries
 
     private static TimeSheetSnapshot Create(TrackedDate date, IList<TimeSheetEntry> entries)
     {
-        return new TimeSheetSnapshot(date, entries, TimeSheetStatus.Created)
+        return new TimeSheetSnapshot(date, entries, TimesheetStatus.Created)
         {
             ModifiedOn = new DateTimeOffset(new DateTime(date, TimeOnly.MinValue))
         };

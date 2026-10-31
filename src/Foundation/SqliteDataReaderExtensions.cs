@@ -8,7 +8,7 @@ internal static class SqliteDataReaderExtensions
     }
 
     public static DateTimeOffset GetModifiedOn(this SqliteDataReader reader) => reader.GetDateTimeOffset(2);
-    public static TimeSheetStatus GetStatus(this SqliteDataReader reader) => (TimeSheetStatus)reader.GetInt32(1);
+    public static TimesheetStatus GetStatus(this SqliteDataReader reader) => (TimesheetStatus)reader.GetInt32(1);
 
     public static TimeSheetEntry? ToTimeSheetEntry(this SqliteDataReader reader)
     {
