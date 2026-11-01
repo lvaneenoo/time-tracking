@@ -1,6 +1,6 @@
 namespace TestFloor;
 
-internal class DeleteTimeSheetEntry(TrackedDate date, Period period) : IStorageCommand
+internal class DeleteTimesheetEntry(TrackedDate date, Period period) : IStorageCommand
 {
     private readonly Period _period = period;
     private readonly TrackedDate _date = date;

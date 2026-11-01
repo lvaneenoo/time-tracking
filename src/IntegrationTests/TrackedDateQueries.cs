@@ -5,7 +5,7 @@ internal static class TrackedDateQueries
     public static TimeSheetSnapshot NineToFive(this TrackedDate date) => Create(date, Entries.NineToFive);
     public static TimeSheetSnapshot NoEntries(this TrackedDate date) => Create(date, []);
 
-    private static TimeSheetSnapshot Create(TrackedDate date, IList<TimeSheetEntry> entries)
+    private static TimeSheetSnapshot Create(TrackedDate date, IList<TimesheetEntry> entries)
     {
         return new TimeSheetSnapshot(date, entries, TimesheetStatus.Created)
         {
@@ -15,9 +15,9 @@ internal static class TrackedDateQueries
 
     internal static class Entries
     {
-        public static readonly List<TimeSheetEntry> NineToFive =
+        public static readonly List<TimesheetEntry> NineToFive =
         [
-            new TimeSheetEntry(new Period(new TimeOnly(9, 0), new TimeOnly(16, 59)), Comment.Empty)
+            new TimesheetEntry(new Period(new TimeOnly(9, 0), new TimeOnly(16, 59)), Comment.Empty)
         ];
     }
 }

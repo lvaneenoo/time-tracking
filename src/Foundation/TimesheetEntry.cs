@@ -1,6 +1,6 @@
-public class TimeSheetEntry
+public class TimesheetEntry
 {
-    internal TimeSheetEntry(Period period, Comment comment)
+    internal TimesheetEntry(Period period, Comment comment)
     {
         Period = period;
         Comment = comment;

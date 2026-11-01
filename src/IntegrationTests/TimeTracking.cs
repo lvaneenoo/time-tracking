@@ -30,7 +30,7 @@ public class TimeTracking : WebApplicationFactory<Program>
     {
         public IStorageCommand Create(TrackedDate date, Period period)
         {
-            return new DeleteTimeSheetEntry(date, period);
+            return new DeleteTimesheetEntry(date, period);
         }
     }
 
@@ -38,7 +38,7 @@ public class TimeTracking : WebApplicationFactory<Program>
     {
         public IStorageCommand Create(TrackedDate date, Period period, Comment comment)
         {
-            return new InsertTimeSheetEntry(date, period, comment);
+            return new InsertTimesheetEntry(date, period, comment);
         }
     }
 }

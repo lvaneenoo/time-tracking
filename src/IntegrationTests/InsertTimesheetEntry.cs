@@ -1,11 +1,11 @@
 namespace TestFloor;
 
-internal class InsertTimeSheetEntry : IStorageCommand
+internal class InsertTimesheetEntry : IStorageCommand
 {
     private readonly Period _period;
     private readonly TrackedDate _date;
 
-    public InsertTimeSheetEntry(TrackedDate date, Period period, Comment comment)
+    public InsertTimesheetEntry(TrackedDate date, Period period, Comment comment)
     {
         _date = date;
         _period = period;

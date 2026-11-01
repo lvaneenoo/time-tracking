@@ -15,11 +15,11 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
 
         var date = _reader.GetDate();
         var status = _reader.GetStatus();
-        var entries = new List<TimeSheetEntry>();
+        var entries = new List<TimesheetEntry>();
 
         var modifiedOn = _reader.GetModifiedOn();
 
-        if (_reader.ToTimeSheetEntry() is { } firstEntry)
+        if (_reader.ToTimesheetEntry() is { } firstEntry)
         {
             entries.Add(firstEntry);
         }
@@ -42,7 +42,7 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
                 modifiedOn = _reader.GetModifiedOn();
             }
 
-            if (_reader.ToTimeSheetEntry() is { } entry)
+            if (_reader.ToTimesheetEntry() is { } entry)
             {
                 entries.Add(entry);
             }

@@ -1,8 +1,8 @@
 internal static class TimeSheetEntryQueries
 {
-    public static TimeSheetEntryResource ToResource(this TimeSheetEntry entry)
+    public static TimesheetEntryResource ToResource(this TimesheetEntry entry)
     {
-        return new TimeSheetEntryResource
+        return new TimesheetEntryResource
         {
             Comment = entry.Comment,
             Period = entry.Period.ToResource()

@@ -10,7 +10,7 @@ public class CtorTests
         var period = Specimen.Period;
         var comment = Specimen.Comment;
 
-        var entry = new TimeSheetEntry(period, comment);
+        var entry = new TimesheetEntry(period, comment);
 
         Assert.Equal(period, entry.Period);
         Assert.Equal(comment, entry.Comment);

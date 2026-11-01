@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-internal class InsertTimeSheetEntry(TrackedDate date, Period period, Comment comment) : IStorageCommand
+internal class InsertTimesheetEntry(TrackedDate date, Period period, Comment comment) : IStorageCommand
 {
     private static readonly string Insert = @"
         INSERT INTO time_sheet_entries
