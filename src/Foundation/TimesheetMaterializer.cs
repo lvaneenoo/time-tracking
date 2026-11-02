@@ -1,10 +1,10 @@
 using Microsoft.Data.Sqlite;
 
-public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<TimeSheet>
+public class TimesheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<Timesheet>
 {
     private readonly SqliteDataReader _reader = reader;
 
-    public async IAsyncEnumerator<TimeSheet> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+    public async IAsyncEnumerator<Timesheet> GetAsyncEnumerator(CancellationToken cancellationToken = default)
     {
         if (!_reader.HasRows)
         {
@@ -30,7 +30,7 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
 
             if (d != date)
             {
-                yield return new TimeSheetSnapshot(date, entries, status)
+                yield return new TimesheetSnapshot(date, entries, status)
                 {
                     ModifiedOn = modifiedOn
                 };
@@ -48,7 +48,7 @@ public class TimeSheetMaterializer(SqliteDataReader reader) : IAsyncEnumerable<T
             }
         }
 
-        yield return new TimeSheetSnapshot(date, entries, status)
+        yield return new TimesheetSnapshot(date, entries, status)
         {
             ModifiedOn = modifiedOn
         };

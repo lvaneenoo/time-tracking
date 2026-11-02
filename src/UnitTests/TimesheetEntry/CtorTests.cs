@@ -1,6 +1,6 @@
 using TestFloor;
 
-namespace TimeSheetEntryTests;
+namespace TimesheetEntryTests;
 
 public class CtorTests
 {

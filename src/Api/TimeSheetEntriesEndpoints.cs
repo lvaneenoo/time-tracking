@@ -76,14 +76,14 @@ internal class TimeSheetEntriesEndpoints
             return Results.ValidationProblem(errors);
         }
 
-        var sheets = context.RequestServices.GetRequiredService<ITimeSheets>();
+        var timesheets = context.RequestServices.GetRequiredService<ITimesheets>();
 
-        if (await sheets.FindAsync(date!, cancellationToken) is not { } sheet)
+        if (await timesheets.FindAsync(date!, cancellationToken) is not { } timesheet)
         {
             return Results.NotFound();
         }
 
-        var (_, entry) = sheet.AddEntry(period!, comment!);
+        var (_, entry) = timesheet.AddEntry(period!, comment!);
 
         if (entry is null)
         {

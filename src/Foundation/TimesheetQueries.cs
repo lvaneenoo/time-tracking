@@ -1,6 +1,6 @@
-public static class TimeSheetQueries
+public static class TimesheetQueries
 {
-    public static (TimeSheet, TimesheetEntry?) AddEntry(this TimeSheet sheet, Period period, Comment comment)
+    public static (Timesheet, TimesheetEntry?) AddEntry(this Timesheet sheet, Period period, Comment comment)
     {
         if (sheet.Entries.Any(entry => period.Overlaps(entry.Period)))
         {
@@ -19,9 +19,9 @@ public static class TimeSheetQueries
         return (sheet.Create(entries), candidate);
     }
 
-    internal static TimeSheet Create(this TimeSheet sheet, IList<TimesheetEntry> entries)
+    internal static Timesheet Create(this Timesheet sheet, IList<TimesheetEntry> entries)
     {
-        return new TimeSheet(sheet.Date, entries, sheet.Status);
+        return new Timesheet(sheet.Date, entries, sheet.Status);
     }
 
     private static int ByPeriod(TimesheetEntry x, TimesheetEntry y) => x.Period.CompareTo(y.Period);

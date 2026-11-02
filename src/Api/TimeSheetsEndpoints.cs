@@ -10,14 +10,14 @@ internal static class TimeSheetsEndpoints
             return Results.BadRequest();
         }
 
-        var sheets = context.RequestServices.GetRequiredService<ITimeSheets>();
+        var timesheets = context.RequestServices.GetRequiredService<ITimesheets>();
 
-        if (await sheets.FindAsync(d, cancellationToken) is not { } sheet)
+        if (await timesheets.FindAsync(d, cancellationToken) is not { } timesheet)
         {
             return Results.NotFound();
         }
 
-        var resourceId = $"\"{sheet.CreateResourceId()}\"";
+        var resourceId = $"\"{timesheet.CreateResourceId()}\"";
 
         if (context.Request.Headers.TryGetValue(HeaderNames.IfNoneMatch, out var value) && value == resourceId)
         {
@@ -26,6 +26,6 @@ internal static class TimeSheetsEndpoints
 
         context.Response.Headers.ETag = new StringValues(resourceId);
 
-        return Results.Ok(sheet.ToResource());
+        return Results.Ok(timesheet.ToResource());
     }
 }

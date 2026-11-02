@@ -1,6 +1,6 @@
 using TestFloor;
 
-namespace TimeSheetTests;
+namespace TimesheetTests;
 
 public class CtorTests
 {
@@ -11,7 +11,7 @@ public class CtorTests
         var entries = new List<TimesheetEntry>();
         var status = Specimen.TimesheetStatus;
 
-        var sheet = new TimeSheet(date, entries, status);
+        var sheet = new Timesheet(date, entries, status);
 
         Assert.Equal(date, sheet.Date);
         Assert.Equal(entries.Count, sheet.Entries.Count);

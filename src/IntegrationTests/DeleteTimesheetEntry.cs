@@ -20,5 +20,5 @@ internal class DeleteTimesheetEntry(TrackedDate date, Period period) : IStorageC
         return Task.FromResult(0);
     }
 
-    private int GetNumber(TimeSheet sheet) => sheet.Entries.Any(entry => _period == entry.Period) ? 1 : 0;
+    private int GetNumber(Timesheet timesheet) => timesheet.Entries.Any(entry => _period == entry.Period) ? 1 : 0;
 }

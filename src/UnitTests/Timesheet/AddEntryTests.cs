@@ -1,13 +1,13 @@
 using TestFloor;
 
-namespace TimeSheetTests;
+namespace TimesheetTests;
 
 public class AddEntryTests
 {
     [Fact]
     public void Test()
     {
-        var sut = new TimeSheet(Specimen.TrackedDate, [], Specimen.TimesheetStatus);
+        var sut = new Timesheet(Specimen.TrackedDate, [], Specimen.TimesheetStatus);
 
         var (sheet, entry) = sut.AddEntry(Specimen.Period, Specimen.Comment);
 

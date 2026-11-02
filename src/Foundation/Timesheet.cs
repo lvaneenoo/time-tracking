@@ -1,6 +1,6 @@
-public class TimeSheet
+public class Timesheet
 {
-    internal TimeSheet(TrackedDate date, IList<TimesheetEntry> entries, TimesheetStatus status)
+    internal Timesheet(TrackedDate date, IList<TimesheetEntry> entries, TimesheetStatus status)
     {
         Date = date;
         Entries = new TimesheetEntryCollection(entries);

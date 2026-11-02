@@ -1,6 +1,6 @@
 namespace TestFloor;
 
-internal class January2025 : ITimeSheets
+internal class January2025 : ITimesheets
 {
     static January2025()
     {
@@ -11,10 +11,10 @@ internal class January2025 : ITimeSheets
         Second = date.NineToFive();
     }
 
-    public static TimeSheet First { get; }
-    public static TimeSheet Second { get; }
+    public static Timesheet First { get; }
+    public static Timesheet Second { get; }
 
-    public async Task<TimeSheet?> FindAsync(TrackedDate date, CancellationToken cancellationToken = default)
+    public async Task<Timesheet?> FindAsync(TrackedDate date, CancellationToken cancellationToken = default)
     {
         if (date == First.Date)
         {

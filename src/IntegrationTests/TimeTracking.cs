@@ -19,8 +19,8 @@ public class TimeTracking : WebApplicationFactory<Program>
             services.RemoveAll<IInsertCommandFactory>();
             services.AddSingleton<IInsertCommandFactory>(new InsertCommandFactory());
 
-            services.RemoveAll<ITimeSheets>();
-            services.AddSingleton<ITimeSheets>(new January2025());
+            services.RemoveAll<ITimesheets>();
+            services.AddSingleton<ITimesheets>(new January2025());
         });
 
         return base.CreateHost(builder);

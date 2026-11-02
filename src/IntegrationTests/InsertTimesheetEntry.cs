@@ -27,5 +27,5 @@ internal class InsertTimesheetEntry : IStorageCommand
         throw new InvalidOperationException();
     }
 
-    private int GetNumber(TimeSheet sheet) => sheet.Entries.All(entry => _period != entry.Period) ? 1 : 0;
+    private int GetNumber(Timesheet timesheet) => timesheet.Entries.All(entry => _period != entry.Period) ? 1 : 0;
 }
