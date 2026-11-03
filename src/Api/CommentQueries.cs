@@ -7,7 +7,7 @@ internal static class CommentQueries
     {
         return
         [
-            new SqliteParameter($"@{TimeSheetEntryTable.Comment}", SqliteType.Text)
+            new SqliteParameter($"@{TimesheetEntryTable.Comment}", SqliteType.Text)
             {
                 Value = comment.ToString()
             }

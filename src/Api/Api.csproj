@@ -21,8 +21,4 @@
     <InternalsVisibleTo Include="UnitTests" />
   </ItemGroup>
 
-  <Target Name="CopyDatabase" AfterTargets="Build">
-    <Copy SourceFiles="..\Database\SQLite\TimeTracking.db" DestinationFolder="$(OutputPath)" />
-  </Target>
-
 </Project>
