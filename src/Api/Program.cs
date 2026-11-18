@@ -15,7 +15,7 @@ var app = builder.Build();
 app.MapPost("/time-sheet-entries/", TimeSheetEntriesEndpoints.PostAsync);
 app.MapDelete("/time-sheet-entries/", TimeSheetEntriesEndpoints.DeleteAsync);
 
-app.MapGet("/time-sheets/{date}", TimeSheetsEndpoints.GetAsync);
+app.MapGet("/timesheets/{date}", TimesheetsEndpoints.GetAsync);
 
 app.Run();
 

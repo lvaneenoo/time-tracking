@@ -1,7 +1,7 @@
 using System.Net;
 using TestFloor;
 
-namespace TimeSheetTests.Retrieval;
+namespace TimesheetTests.Retrieval;
 
 public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {

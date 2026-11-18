@@ -1,6 +1,6 @@
 using Microsoft.Net.Http.Headers;
 
-namespace TimeSheetTests.Retrieval;
+namespace TimesheetTests.Retrieval;
 
 internal class Sender(HttpClient client)
 {
@@ -11,7 +11,7 @@ internal class Sender(HttpClient client)
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri($"/time-sheets/{date}")
+            RequestUri = new Uri($"/timesheets/{date}")
         };
 
         if (resourceId is not null)

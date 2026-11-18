@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 
-internal static class TimeSheetsEndpoints
+internal static class TimesheetsEndpoints
 {
     public static async Task<IResult> GetAsync(string date, HttpContext context, CancellationToken cancellationToken)
     {
