@@ -2,7 +2,7 @@ using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text.Json;
 
-namespace TimeSheetEntryTests.Creation;
+namespace TimesheetEntryTests.Creation;
 
 internal class Sender(HttpClient client)
 {
@@ -12,7 +12,7 @@ internal class Sender(HttpClient client)
 
     public async Task<HttpResponseMessage> SendAsync(string date, string periodStart, string periodEnd, string comment)
     {
-        var request = new PostTimeSheetEntryRequest
+        var request = new PostTimesheetEntryRequest
         {
             Comment = comment,
             Date = date,
@@ -23,10 +23,10 @@ internal class Sender(HttpClient client)
             }
         };
 
-        return await _httpClient.PostAsync(new Uri("/time-sheet-entries/"), CreateContent(request));
+        return await _httpClient.PostAsync(new Uri("/timesheet-entries/"), CreateContent(request));
     }
 
-    private static StringContent CreateContent(PostTimeSheetEntryRequest request)
+    private static StringContent CreateContent(PostTimesheetEntryRequest request)
     {
         return new StringContent(JsonSerializer.Serialize(request), ApplicationJson);
     }

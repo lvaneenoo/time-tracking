@@ -1,6 +1,6 @@
 using System.Web;
 
-namespace TimeSheetEntryTests.Deletion;
+namespace TimesheetEntryTests.Deletion;
 
 internal class Sender(HttpClient client)
 {
@@ -8,7 +8,7 @@ internal class Sender(HttpClient client)
 
     public async Task<HttpResponseMessage> SendAsync(string date, string periodStart, string periodEnd)
     {
-        var builder = new UriBuilder("http://localhost/time-sheet-entries/");
+        var builder = new UriBuilder("http://localhost/timesheet-entries/");
         var query = HttpUtility.ParseQueryString("");
 
         query[ParameterNames.Date] = date;

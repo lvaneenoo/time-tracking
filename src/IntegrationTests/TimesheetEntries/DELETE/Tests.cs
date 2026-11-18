@@ -1,7 +1,7 @@
 using System.Net;
 using TestFloor;
 
-namespace TimeSheetEntryTests.Deletion;
+namespace TimesheetEntryTests.Deletion;
 
 public class Tests(TimeTracking timeTracking) : IClassFixture<TimeTracking>
 {

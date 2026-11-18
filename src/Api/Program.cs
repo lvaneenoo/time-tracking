@@ -12,8 +12,8 @@ builder.Services.AddSingleton<ITimesheets, Timesheets>();
 
 var app = builder.Build();
 
-app.MapPost("/time-sheet-entries/", TimeSheetEntriesEndpoints.PostAsync);
-app.MapDelete("/time-sheet-entries/", TimeSheetEntriesEndpoints.DeleteAsync);
+app.MapPost("/timesheet-entries/", TimesheetEntriesEndpoints.PostAsync);
+app.MapDelete("/timesheet-entries/", TimesheetEntriesEndpoints.DeleteAsync);
 
 app.MapGet("/timesheets/{date}", TimesheetsEndpoints.GetAsync);
 

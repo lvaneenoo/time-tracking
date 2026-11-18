@@ -1,4 +1,4 @@
-internal class PostTimeSheetEntryRequest
+internal class PostTimesheetEntryRequest
 {
     public required string Comment { get; init; }
     public required string Date { get; init; }

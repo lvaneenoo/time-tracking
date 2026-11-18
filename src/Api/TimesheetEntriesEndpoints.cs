@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-internal class TimeSheetEntriesEndpoints
+internal class TimesheetEntriesEndpoints
 {
     public static async Task<IResult> DeleteAsync(
         [FromQuery(Name = "date")] string date,
@@ -40,7 +40,7 @@ internal class TimeSheetEntriesEndpoints
     }
 
     public static async Task<IResult> PostAsync(
-        PostTimeSheetEntryRequest request,
+        PostTimesheetEntryRequest request,
         HttpContext context,
         CancellationToken cancellationToken)
     {
