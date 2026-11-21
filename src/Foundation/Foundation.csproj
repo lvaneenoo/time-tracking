@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ValueObjects\ValueObjects.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="IntegrationTests" />
     <InternalsVisibleTo Include="UnitTests" />
   </ItemGroup>
